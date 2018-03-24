@@ -1,3 +1,4 @@
+package Model;
 // Patient class containing all of the information for the patient in the hospital
 
 import java.io.File;
