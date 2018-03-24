@@ -18,7 +18,7 @@ public class Hospital {
         System.out.println("list/l/L:           Lists patients.");
         System.out.println("help/h/H:        Displays this help message.");
     }
-
+    
     public void listPatients(){
         Iterator<Patient> patientIterator = patients.iterator();
         while(patientIterator.hasNext()){
