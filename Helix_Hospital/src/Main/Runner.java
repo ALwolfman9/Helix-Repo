@@ -6,16 +6,29 @@ import DB.DBController;
 
 public class Runner {
 
-	DBController dbc = new DBController();
+	private DBController dbc = new DBController();
 	
 	
-	public void run() {
+	public void run(boolean createNewDatabase) {
 		try {
 			Class.forName("org.h2.Driver");
 			System.out.println("Connecting to database...");
 			Connection conn = DriverManager.getConnection("jdbc:h2:~/helix_repo", "test", "test");
 			System.out.println("Connection Successful...");
-			System.out.println("Database creation required: " + dbc.createDatabase(conn));
+
+			if(createNewDatabase) {
+				// if you want to delete the current database and start fresh (for testing)
+				boolean databaseCreated = dbc.createDatabase(conn);
+				if (!databaseCreated) {
+					System.out.println("Database already exists, deleting it and starting over");
+					dbc.deleteDatabase(conn);
+					databaseCreated = dbc.createDatabase(conn);
+				}
+				System.out.println("Database creation required: " + databaseCreated);
+			} else
+				// if you want to keep the current database, if it exists
+				System.out.println("Database creation required: " + dbc.createDatabase(conn));
+
 			System.out.println("Starting Application...");
 			
 			conn.close();
@@ -32,7 +45,7 @@ public class Runner {
 	public static void main(String[] args) {
 		
 		Runner runner = new Runner();
-		runner.run();
+		runner.run(true);
 		
 	}
 
