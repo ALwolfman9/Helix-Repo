@@ -53,14 +53,16 @@ public class CommandLineSupport extends CommandLineUser {
     private boolean createPatient(){
         Scanner in = new Scanner(System.in);
 
-        String firstName, lastName, username;
-        int ssn;
+        String firstName, lastName, insuranceID;
         System.out.println("Create an Employee");
         System.out.println("Enter first name: ");
         firstName = in.next();
         System.out.println("Enter last name: ");
         lastName = in.next();
+        System.out.println("Enter insurance ID: ");
+        insuranceID = in.next();
 
-        return hospital.addPatient(firstName, lastName, null, 0, null, null, 0, 0, null);
+        return hospital.addPatient(firstName, lastName, null, null, null,
+                null, insuranceID, null, null);
     }
 }

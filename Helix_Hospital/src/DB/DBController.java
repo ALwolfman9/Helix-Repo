@@ -23,15 +23,17 @@ public class DBController {
 					"ssn char(10) not null unique, " +
 					"email varchar(50), " +
 					"address varchar(255), " +
-					"type varchar(20) not null, " +
+					"type enum('Doctor', 'Nurse', 'Support') not null, " +
 					")";
 			st.execute(createString);
+
 			createString = "CREATE TABLE IF NOT EXISTS doctor ("
 					+ "username VARCHAR(30) NOT NULL PRIMARY KEY,"
 					+ "specialization VARCHAR(30),"
 					+ "FOREIGN KEY (username) REFERENCES EMPLOYEE(username)"
 					+ ");";
 			st.execute(createString);
+
 			createString = "CREATE TABLE IF NOT EXISTS patient ("
 					+ "patient_ID CHAR(10) NOT NULL PRIMARY KEY,"
 					+ "room_number CHAR(5),"
@@ -45,6 +47,7 @@ public class DBController {
 					+ "status VARCHAR(20)" //enum? 
 					+ ");";
 			st.execute(createString);
+
 			createString = "CREATE TABLE IF NOT EXISTS appointment("
 					+ "username VARCHAR(30) NOT NULL, "
 					+ "patient_ID CHAR(10) NOT NULL, "
@@ -56,6 +59,7 @@ public class DBController {
 			st.execute(createString);
 			String alterString = "ALTER TABLE appointment ADD CONSTRAINT IF NOT EXISTS appointmentPK PRIMARY KEY (username, patient_ID, date);";
 			st.execute(alterString);
+
 			createString = "CREATE TABLE IF NOT EXISTS prescription("
 					+ "patient_ID CHAR(10) NOT NULL,"
 					+ "prescription_ID VARCHAR(20) NOT NULL,"
@@ -67,6 +71,7 @@ public class DBController {
 			st.execute(createString);
 			alterString = "ALTER TABLE prescription ADD CONSTRAINT IF NOT EXISTS prescriptionPK PRIMARY KEY (patient_ID, prescription_ID);";
 			st.execute(alterString);
+
 			createString = "CREATE TABLE IF NOT EXISTS medical_record ("
 					+ "username VARCHAR(30) NOT NULL,"
 					+ "patient_ID CHAR(10) NOT NULL,"
@@ -78,6 +83,7 @@ public class DBController {
 			st.execute(createString);
 			alterString = "ALTER TABLE medical_record ADD CONSTRAINT IF NOT EXISTS medical_recordPK PRIMARY KEY (username, patient_ID, date);";
 			st.execute(alterString);
+
 			createString = "CREATE TABLE IF NOT EXISTS medical_history("
 					+ "patient_ID CHAR(10) PRIMARY KEY,"
 					+ "blood_type VARCHAR(3),"

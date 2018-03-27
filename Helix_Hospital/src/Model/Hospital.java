@@ -15,24 +15,24 @@ public class Hospital {
         this.conn = conn;
     }
 
-    public boolean addPatient(String firstName, String lastName, String middleInit, int roomNo, String email, Patient.Gender gender,
-                              int insurance_ID, int phoneNo, String status){
+    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo,
+                              String email, Employee.Gender gender, String insurance_ID,
+                              String phoneNo, String status){
+
         Random random = new Random();
-        int patient_ID = random.nextInt();
-        String genderString;
-        if(gender.equals(Patient.Gender.F)){
-            genderString = "F";
-        }
-        else if(gender.equals(Patient.Gender.M)){
-            genderString = "M";
-        }
-        else{
-            genderString = "O";
-        }
-        String sql = "INSERT INTO patient " + "VALUES ('" + Integer.toString(patient_ID) + "', '" + Integer.toString(roomNo)
-                + "', '" + firstName + "', '" + middleInit + "', '" + lastName + "', '" + email + "', '" + genderString
-                + "', '" + Integer.toString(insurance_ID) + "', '" + Integer.toString(phoneNo) + "', '"
-                + status + "');";
+        String patient_ID = Integer.toString(random.nextInt());
+
+        String sql = "INSERT INTO patient " +
+                "VALUES (" + formatString(patient_ID) + ", " +
+                formatString(roomNo) + ", " +
+                formatString(firstName) + ", " +
+                formatString(middleInit) + ", " +
+                formatString(lastName) + ", " +
+                formatString(email) + ", " +
+                formatString(formatGender(gender)) + ", " +
+                formatString(insurance_ID) + ", " +
+                formatString(phoneNo) + ", " +
+                formatString(status) + ");";
         try {
             Statement st = conn.createStatement();
             st.execute(sql);
@@ -58,10 +58,15 @@ public class Hospital {
     }
 
     public boolean addDoctor(String username, String firstName, String middleInit, String lastName,
-                             int phoneNo, Employee.Gender gender, int ssn, String email, String address,
+                             String phoneNo, Employee.Gender gender, String ssn, String email, String address,
                              Employee.Type type, String special){
-        String sql = "INSERT INTO doctor " + "VALUES ('" + username + "', '" + special + "');";
+
         addEmployee(username, firstName, middleInit, lastName, phoneNo, gender, ssn, email, address, type);
+
+        String sql = "INSERT INTO doctor " +
+                "VALUES (" + formatString(username) + ", " +
+                formatString(special) + ");";
+
         try {
             Statement st = conn.createStatement();
             st.execute(sql);
@@ -74,34 +79,19 @@ public class Hospital {
     }
 
     public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
-                               int phoneNo, Employee.Gender gender, int ssn, String email, String address, Employee.Type type){
-        String typeString;
-        if (type == Employee.Type.DOCTOR){
-            typeString = "doctor";
-        }
-        else if(type == Employee.Type.NURSE){
-            typeString = "nurse";
-        }
-        else if(type == Employee.Type.SUPPORT){
-            typeString = "support";
-        }
-        else{
-            typeString = "unknown";
-        }
+                               String phoneNo, Employee.Gender gender, String ssn, String email, String address, Employee.Type type){
 
-        String genderString;
-        if(gender.equals(Employee.Gender.F)){
-            genderString = "F";
-        }
-        else if(gender.equals(Employee.Gender.M)){
-            genderString = "M";
-        }
-        else{
-            genderString = "O";
-        }
-        String sql = "INSERT INTO employee " + "VALUES ('" + username + "', '" + firstName + "', '" + middleInit
-                + "', '" + lastName + "', '" + Integer.toString(phoneNo) + "', '" + genderString + "', '"
-                + Integer.toString(ssn) + "', '" + email + "', '" + address + "', '" + typeString + "');";
+        String sql = "INSERT INTO employee " +
+                "VALUES (" + formatString(username) + ", " +
+                formatString(firstName) + ", " +
+                formatString(middleInit) + ", " +
+                formatString(lastName) + ", " +
+                formatString(phoneNo) + ", " +
+                formatString(formatGender(gender)) + ", " +
+                formatString(ssn) + ", " +
+                formatString(email) + ", " +
+                formatString(address) + ", " +
+                formatString(formatType(type)) + ");";
         try {
             Statement st = conn.createStatement();
             st.execute(sql);
@@ -145,6 +135,41 @@ public class Hospital {
         }
         //do something with the sql
         return null;
+    }
+
+    private String formatString(String s){
+        if(s == null) return null;
+        else return "'" + s + "'";
+
+    }
+
+    private String formatGender(Employee.Gender g){
+        if(g == null) return null;
+        switch (g){
+            case O:
+                return "O";
+            case F:
+                return "F";
+            case M:
+                return "M";
+            default:
+                return "H";
+        }
+
+    }
+
+    private String formatType(Employee.Type t){
+        if(t == null) return null;
+        switch (t){
+            case DOCTOR:
+                return "Doctor";
+            case NURSE:
+                return "Nurse";
+            case SUPPORT:
+                return "Support";
+            default:
+                return "H";
+        }
     }
 
 }
