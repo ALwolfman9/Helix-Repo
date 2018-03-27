@@ -31,6 +31,7 @@ public class Runner {
 
 			System.out.println("Starting Application...");
 			
+			
 			conn.close();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
