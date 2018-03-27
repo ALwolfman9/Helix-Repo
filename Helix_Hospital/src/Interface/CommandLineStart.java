@@ -1,15 +1,13 @@
-package Main;
+package Interface;
 
 import Model.*;
 
 import java.util.Scanner;
 
-public class CommandLine {
+public class CommandLineStart extends CommandLine {
 
-    Hospital hospital;
-
-    public CommandLine(Hospital hospital){
-        this.hospital = hospital;
+    public CommandLineStart(Hospital hospital){
+        super(hospital);
     }
 
     public void run(){
@@ -70,6 +68,9 @@ public class CommandLine {
             case SUPPORT:
                 cmdLine = new CommandLineSupport(hospital, emp);
                 break;
+            default:
+                System.out.println("Username wasn't recognized. Please try again.");
+                return;
         }
         cmdLine.run();
     }
