@@ -3,36 +3,35 @@ package Main;
 import java.sql.*;
 
 import DB.DBController;
+import Interface.CommandLineStart;
+import Model.Hospital;
 
 public class Runner {
 
 	private DBController dbc = new DBController();
 	
 	
-	public void run(boolean createNewDatabase) {
+	public Connection run(boolean resetDatabase) {
+		Connection conn = null;
 		try {
 			Class.forName("org.h2.Driver");
 			System.out.println("Connecting to database...");
-			Connection conn = DriverManager.getConnection("jdbc:h2:~/helix_repo", "test", "test");
-			System.out.println("Connection Successful...");
+			conn = DriverManager.getConnection("jdbc:h2:~/helix_repo", "test", "test");
+			System.out.println("Connection successful.");
+			if(resetDatabase) {
+				System.out.println("Deleting database...");
+				dbc.deleteDatabase(conn);
+				System.out.println("Deletion successful.");
+			}
+			boolean creationSuccess = dbc.createDatabase(conn);
+			if (!creationSuccess) {
+				System.out.println("Error in initializing database.");
+				return null;
+			}
+			System.out.println("Database successfully initialized.");
+			System.out.println("Starting Application...\n");
 
-			if(createNewDatabase) {
-				// if you want to delete the current database and start fresh (for testing)
-				boolean databaseCreated = dbc.createDatabase(conn);
-				if (!databaseCreated) {
-					System.out.println("Database already exists, deleting it and starting over");
-					dbc.deleteDatabase(conn);
-					databaseCreated = dbc.createDatabase(conn);
-				}
-				System.out.println("Database creation required: " + databaseCreated);
-			} else
-				// if you want to keep the current database, if it exists
-				System.out.println("Database creation required: " + dbc.createDatabase(conn));
-
-			System.out.println("Starting Application...");
-			
-			
-			conn.close();
+			return conn;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,14 +39,49 @@ public class Runner {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return conn;
 	}
 	
 
 	public static void main(String[] args) {
-		
+		System.out.println("Would you like to reset the database? (y/n)");
+		java.util.Scanner in = new java.util.Scanner(System.in);
+		boolean resetDatabase = false;
+		boolean validCommand = false;
+		while(!validCommand){
+			String cmd = in.next();
+			switch(cmd){
+				case "y":
+				case "Y":
+				case "yes":
+					resetDatabase = true;
+					validCommand = true;
+					break;
+				case "n":
+				case "N":
+				case "no":
+					resetDatabase = false;
+					validCommand = true;
+					break;
+				default:
+					System.out.println("That command was not recognized. Try again: (y/n)");
+			}
+		}
 		Runner runner = new Runner();
-		runner.run(true);
-		
+		Connection conn = runner.run(resetDatabase);
+		if (conn == null){
+			System.out.println("Database connection could not be established.");
+			return;
+		}
+		Hospital hospital = new Hospital(conn);
+		CommandLineStart cl = new CommandLineStart(hospital);
+		cl.run();
+
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

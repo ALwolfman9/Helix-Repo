@@ -1,60 +1,150 @@
 package Model;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Hospital {
-    private HashSet<Patient> patients;
+    private Connection conn;
 
-    public Hospital(){
-
+    public Hospital(Connection conn){
+        this.conn = conn;
     }
 
-    public static void printHelp(){
-        System.out.println("Usage: patient/p/P | quit/q/Q | list/l/L | help/h/H");
-        System.out.println("patient/p/P:        Add a patient");
-        System.out.println("quit/q/Q:           Quits program.");
-        System.out.println("list/l/L:           Lists patients.");
-        System.out.println("help/h/H:        Displays this help message.");
-    }
-    
-    public void listPatients(){
-        Iterator<Patient> patientIterator = patients.iterator();
-        while(patientIterator.hasNext()){
-            System.out.println("Patient: " + patientIterator.next());
+    public boolean addPatient(String firstName, String lastName, String middleInit, int roomNo, String email, Patient.Gender gender,
+                              int insurance_ID, int phoneNo, String status){
+        Random random = new Random();
+        int patient_ID = random.nextInt();
+        String genderString;
+        if(gender.equals(Patient.Gender.F)){
+            genderString = "F";
+        }
+        else if(gender.equals(Patient.Gender.M)){
+            genderString = "M";
+        }
+        else{
+            genderString = "O";
+        }
+        String sql = "INSERT INTO patient " + "VALUES ('" + Integer.toString(patient_ID) + "', '" + Integer.toString(roomNo)
+                + "', '" + firstName + "', '" + middleInit + "', '" + lastName + "', '" + email + "', '" + genderString
+                + "', '" + Integer.toString(insurance_ID) + "', '" + Integer.toString(phoneNo) + "', '"
+                + status + "');";
+        try {
+            Statement st = conn.createStatement();
+            st.execute(sql);
+            return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
         }
     }
 
-    public static void main(String[] args){
-        System.out.println("Welcome to the Hospital!");
-        Hospital hospital = new Hospital();
+    public Employee getEmployee(String username){
+        String sql = "SELECT * FROM employee WHERE username = '" + username + "';";
+        try {
+            Statement st = conn.createStatement();
+            st.execute(sql);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //do something with the sql
+        return null;
+    }
 
-
-        Scanner scanner = new Scanner(System.in);
-        String command;
-
-        while(true){
-            printHelp();
-            command = scanner.next();
-            if (command.equals("Q") || command.equals("q") || command.equals("quit")) {
-                System.out.println("Exiting program...");
-                break;
-            } else if (command.equals("L") || command.equals("l") || command.equals("list")) {
-                //display list of urls
-                hospital.listPatients();
-            }
-            else if(command.equals("H") || command.equals("h") || command.equals("help")){
-                printHelp();
-            }
-            else if(command.equals("P") || command.equals("p") || command.equals("patient")) {
-                System.out.println("Input Patient Data File (CSV)");
-
-                String filename = scanner.next();
-                File file = new File(filename);
-                Patient patient = new Patient(file);
-            }
-            break;
+    public boolean addDoctor(String username, String firstName, String middleInit, String lastName,
+                             int phoneNo, Employee.Gender gender, int ssn, String email, String address,
+                             Employee.Type type, String special){
+        String sql = "INSERT INTO doctor " + "VALUES ('" + username + "', '" + special + "');";
+        addEmployee(username, firstName, middleInit, lastName, phoneNo, gender, ssn, email, address, type);
+        try {
+            Statement st = conn.createStatement();
+            st.execute(sql);
+            return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
         }
     }
+
+    public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
+                               int phoneNo, Employee.Gender gender, int ssn, String email, String address, Employee.Type type){
+        String typeString;
+        if (type == Employee.Type.DOCTOR){
+            typeString = "doctor";
+        }
+        else if(type == Employee.Type.NURSE){
+            typeString = "nurse";
+        }
+        else if(type == Employee.Type.SUPPORT){
+            typeString = "support";
+        }
+        else{
+            typeString = "unknown";
+        }
+
+        String genderString;
+        if(gender.equals(Employee.Gender.F)){
+            genderString = "F";
+        }
+        else if(gender.equals(Employee.Gender.M)){
+            genderString = "M";
+        }
+        else{
+            genderString = "O";
+        }
+        String sql = "INSERT INTO employee " + "VALUES ('" + username + "', '" + firstName + "', '" + middleInit
+                + "', '" + lastName + "', '" + Integer.toString(phoneNo) + "', '" + genderString + "', '"
+                + Integer.toString(ssn) + "', '" + email + "', '" + address + "', '" + typeString + "');";
+        try {
+            Statement st = conn.createStatement();
+            st.execute(sql);
+            return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Iterator<Patient> getAllPatients(){
+        String sql = "SELECT "
+                + "first_name, last_name, gender, patient_ID "
+                + "FROM "
+                + "patient;";
+        try {
+            Statement st = conn.createStatement();
+            st.execute(sql);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //do something with the sql
+        return null;
+    }
+
+    public Iterator<Patient> getPatientsOfDoctor(Employee user){
+        String sql = "SELECT "
+                + "*"
+                + "FROM "
+                + "patient "
+                + "WHERE "
+                + ""; //<-- needs to be doctor's username user.getName
+        try {
+            Statement st = conn.createStatement();
+            st.execute(sql);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //do something with the sql
+        return null;
+    }
+
 }
