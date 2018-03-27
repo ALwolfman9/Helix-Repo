@@ -61,6 +61,6 @@ public class CommandLineSupport extends CommandLineUser {
         System.out.println("Enter last name: ");
         lastName = in.next();
 
-        return hospital.addPatient(firstName, lastName);
+        return hospital.addPatient(firstName, lastName, null, 0, null, null, 0, 0, null);
     }
 }

@@ -63,10 +63,10 @@ public class CommandLineAdmin extends CommandLine {
         if(type == Employee.Type.DOCTOR) {
             System.out.println("Enter the doctor's specialization: ");
             String special = in.next();
-            return hospital.addDoctor(firstName, lastName, username, ssn, type, special);
+            return hospital.addDoctor(username, firstName, null, lastName, 0, Employee.Gender.O, ssn, null, null, type, special);
         }
 
-        return hospital.addEmployee(firstName, lastName, username, ssn, type);
+        return hospital.addEmployee(username, firstName, null, lastName, 0, Employee.Gender.O, ssn, null, null, type);
     }
 
     private Employee.Type getType(){
