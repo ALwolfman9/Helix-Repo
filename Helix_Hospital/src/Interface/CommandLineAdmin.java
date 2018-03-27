@@ -22,14 +22,14 @@ public class CommandLineAdmin extends CommandLine {
 
             // TODO add ability to modify employee
             switch(cmd){
-                case "n":
-                case "N":
-                case "new":
+                case "e":
+                case "E":
+                case "employee":
                     if(!createEmployee()) System.out.println("Employee could not be created");
                     break;
-                case "q":
-                case "Q":
-                case "quit":
+                case "l":
+                case "L":
+                case "logout":
                     return;
                 default:
                     System.out.println("That command was not recognized");
@@ -39,7 +39,7 @@ public class CommandLineAdmin extends CommandLine {
 
     private void printHelp(){
         System.out.println("Usage: employee/e/E | logout/l/L");
-        System.out.println("new/n/N\t\t\tAdd a new employee");
+        System.out.println("employee/e/E\t\t\tAdd a new employee");
         System.out.println("logout/l/L\t\t\tLogout of the Hospital application");
     }
 
@@ -59,6 +59,12 @@ public class CommandLineAdmin extends CommandLine {
         System.out.println("Enter the ssn: ");
         ssn = in.nextInt();
         type = getType();
+
+        if(type == Employee.Type.Doctor) {
+            System.out.println("Enter the doctor's specialization: ");
+            String special = in.next();
+            return hospital.addDoctor(firstName, lastName, username, ssn, type);
+        }
 
         return hospital.addEmployee(firstName, lastName, username, ssn, type);
     }

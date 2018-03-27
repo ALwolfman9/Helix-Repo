@@ -10,6 +10,7 @@ public class CommandLineStart extends CommandLine {
         super(hospital);
     }
 
+    @Override
     public void run(){
         Scanner in = new Scanner(System.in);
         System.out.println("Welcome to the Hospital!");
@@ -73,11 +74,6 @@ public class CommandLineStart extends CommandLine {
                 return;
         }
         cmdLine.run();
-    }
-
-    private void runAdmin(){
-        System.out.println("Welcome Admin!");
-        System.out.println("");
     }
 
 }
