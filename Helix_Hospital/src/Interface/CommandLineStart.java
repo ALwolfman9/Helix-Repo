@@ -48,13 +48,13 @@ public class CommandLineStart extends CommandLine {
 
         CommandLine cmdLine;
 
-        System.out.println("Please log in: ");
+        System.out.println("Please log in (q to leave login): ");
         String username = in.next();
         if(username.equals("admin")) {
             cmdLine = new CommandLineAdmin(hospital);
             cmdLine.run();
             return;
-        }
+        } else if(username.equals("q")) return;
         Employee emp = hospital.getEmployee(username);
 
         while(emp == null){
@@ -64,7 +64,7 @@ public class CommandLineStart extends CommandLine {
                 cmdLine = new CommandLineAdmin(hospital);
                 cmdLine.run();
                 return;
-            }
+            } else if(username.equals("q")) return;
             emp = hospital.getEmployee(username);
         }
         switch(emp.getType()){
