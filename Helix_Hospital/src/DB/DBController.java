@@ -18,9 +18,9 @@ public class DBController {
 					"first_name varchar(20) not null, " +
 					"middle_initial varchar(1), " +
 					"last_name varchar(30), " +
-					"phone integer(10), " +
+					"phone char(10), " +
 					"sex enum('M', 'F', 'O'), " +
-					"ssn int(10) not null unique, " +
+					"ssn char(10) not null unique, " +
 					"email varchar(50), " +
 					"address varchar(255), " +
 					"type varchar(20) not null, " +
@@ -33,21 +33,21 @@ public class DBController {
 					+ ");";
 			st.execute(createString);
 			createString = "CREATE TABLE IF NOT EXISTS patient ("
-					+ "patient_ID INTEGER(10) NOT NULL PRIMARY KEY,"
-					+ "room_number INTEGER(5),"
+					+ "patient_ID CHAR(10) NOT NULL PRIMARY KEY,"
+					+ "room_number CHAR(5),"
 					+ "first_name VARCHAR(20) NOT NULL,"
 					+ "middle_initial VARCHAR(1),"
 					+ "last_name VARCHAR(20) NOT NULL,"
 					+ "email VARCHAR(50),"
 					+ "sex ENUM('M', 'F', 'O'),"
-					+ "insurance_ID INTEGER(15),"
-					+ "phone INTEGER(10),"
+					+ "insurance_ID CHAR(15),"
+					+ "phone CHAR(10),"
 					+ "status VARCHAR(20)" //enum? 
 					+ ");";
 			st.execute(createString);
 			createString = "CREATE TABLE IF NOT EXISTS appointment("
 					+ "username VARCHAR(30) NOT NULL, "
-					+ "patient_ID INTEGER(10) NOT NULL, "
+					+ "patient_ID CHAR(10) NOT NULL, "
 					+ "date DATETIME NOT NULL, "
 					+ "reason_for_visit VARCHAR(255), "
 					+ "FOREIGN KEY (username) REFERENCES EMPLOYEE(username), "
@@ -57,8 +57,8 @@ public class DBController {
 			String alterString = "ALTER TABLE appointment ADD CONSTRAINT IF NOT EXISTS appointmentPK PRIMARY KEY (username, patient_ID, date);";
 			st.execute(alterString);
 			createString = "CREATE TABLE IF NOT EXISTS prescription("
-					+ "patient_ID INTEGER(10) NOT NULL,"
-					+ "prescription_ID INTEGER(20) NOT NULL,"
+					+ "patient_ID CHAR(10) NOT NULL,"
+					+ "prescription_ID VARCHAR(20) NOT NULL,"
 					+ "drug_name VARCHAR(30) NOT NULL,"
 					+ "dosage VARCHAR(30) NOT NULL,"
 					+ "duration VARCHAR(20) NOT NULL,"
@@ -69,7 +69,7 @@ public class DBController {
 			st.execute(alterString);
 			createString = "CREATE TABLE IF NOT EXISTS medical_record ("
 					+ "username VARCHAR(30) NOT NULL,"
-					+ "patient_ID INTEGER(10) NOT NULL,"
+					+ "patient_ID CHAR(10) NOT NULL,"
 					+ "date DATETIME NOT NULL,"
 					+ "notes VARCHAR(255),"
 					+ "FOREIGN KEY (username) REFERENCES EMPLOYEE(username),"
@@ -79,7 +79,7 @@ public class DBController {
 			alterString = "ALTER TABLE medical_record ADD CONSTRAINT IF NOT EXISTS medical_recordPK PRIMARY KEY (username, patient_ID, date);";
 			st.execute(alterString);
 			createString = "CREATE TABLE IF NOT EXISTS medical_history("
-					+ "patient_ID INTEGER(10) PRIMARY KEY,"
+					+ "patient_ID CHAR(10) PRIMARY KEY,"
 					+ "blood_type VARCHAR(3),"
 					+ "family_history VARCHAR(255),"
 					+ "past_conditions VARCHAR(255),"
