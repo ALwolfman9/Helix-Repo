@@ -50,13 +50,21 @@ public class CommandLineStart extends CommandLine {
 
         System.out.println("Please log in: ");
         String username = in.next();
-        if(username.equals("admin")) cmdLine = new CommandLineAdmin(hospital);
+        if(username.equals("admin")) {
+            cmdLine = new CommandLineAdmin(hospital);
+            cmdLine.run();
+            return;
+        }
         Employee emp = hospital.getEmployee(username);
 
         while(emp == null){
             System.out.println("Username was incorrect. Please try again: ");
             username = in.next();
-            if(username.equals("admin")) cmdLine = new CommandLineAdmin(hospital);
+            if(username.equals("admin")) {
+                cmdLine = new CommandLineAdmin(hospital);
+                cmdLine.run();
+                return;
+            }
             emp = hospital.getEmployee(username);
         }
         switch(emp.getType()){
