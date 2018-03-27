@@ -59,7 +59,7 @@ public class CommandLineStart extends CommandLine {
             if(username.equals("admin")) cmdLine = new CommandLineAdmin(hospital);
             emp = hospital.getEmployee(username);
         }
-        switch(emp.type){
+        switch(emp.getType()){
             case DOCTOR:
                 cmdLine = new CommandLineDoctor(hospital, emp);
                 break;

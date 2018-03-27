@@ -5,35 +5,26 @@ import java.io.File;
 import java.util.HashMap;
 
 public class Patient {
-    private String name;
-    private String phoneNumber;
-    private String eMail;
+    private String firstName;
+    private String lastName;
     private Gender gender;
-    private String SSN;
-    private HashMap<String, Prescription> prescriptions;
+    private int id;
 
     enum Gender{
         M,
-        F;
+        F,
+        O;
     }
 
-    public Patient(String name, String phoneNumber, String eMail, Gender gender, String SSN){
-        this.name = name;
-        this.eMail = eMail;
-        this.phoneNumber = phoneNumber;
+    public Patient(String firstName, String lastName, Gender gender, int id){
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.gender = gender;
-        this.SSN = SSN;
+        this.id = id;
     }
 
-    public Patient(File file){
-
-    }
-
-    public void importPrescriptions(File file){
-        //populate prescriptions
-    }
 
     public String toString(){
-        return name;
+        return firstName + lastName;
     }
 }

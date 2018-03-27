@@ -60,10 +60,10 @@ public class CommandLineAdmin extends CommandLine {
         ssn = in.nextInt();
         type = getType();
 
-        if(type == Employee.Type.Doctor) {
+        if(type == Employee.Type.DOCTOR) {
             System.out.println("Enter the doctor's specialization: ");
             String special = in.next();
-            return hospital.addDoctor(firstName, lastName, username, ssn, type);
+            return hospital.addDoctor(firstName, lastName, username, ssn, type, special);
         }
 
         return hospital.addEmployee(firstName, lastName, username, ssn, type);
@@ -77,13 +77,10 @@ public class CommandLineAdmin extends CommandLine {
             switch (t) {
                 case "d":
                     return Employee.Type.DOCTOR;
-                    break;
                 case "n":
                     return Employee.Type.NURSE;
-                    break;
                 case "s":
                     return Employee.Type.SUPPORT;
-                    break;
                 default:
                     System.out.println("Please enter a valid type");
             }
