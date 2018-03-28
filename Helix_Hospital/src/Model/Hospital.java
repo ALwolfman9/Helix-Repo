@@ -46,7 +46,7 @@ public class Hospital {
     public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo, String email, Patient.Gender gender,
             String insurance_ID, String phoneNo, String status) {
     	String insertStatement = "insert into patient(room_number, first_name, middle_initial, last_name, email, sex, insurance_id, phone, status) "
-    			+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+    			+ "VALUES(?,?,?,?,?,?,?,?,?)";
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(insertStatement);
@@ -55,7 +55,7 @@ public class Hospital {
     		preparedStmt.setString (3, middleInit);
     		preparedStmt.setString (4, lastName);
     		preparedStmt.setString (5, email);
-    		preparedStmt.setString (6, gender.toString());
+    		preparedStmt.setString (6, gender.name());
     		preparedStmt.setString (7, insurance_ID);
     		preparedStmt.setString (8, phoneNo);
     		preparedStmt.setString (9, status);
@@ -102,45 +102,74 @@ public class Hospital {
 
         addEmployee(username, firstName, middleInit, lastName, phoneNo, gender, ssn, email, address, type);
 
-        String sql = "INSERT INTO doctor " +
-                "VALUES (" + formatString(username) + ", " +
-                formatString(special) + ");";
+        String insertStatement = "INSERT INTO doctor(username, specialization) VALUES (?,?);";
 
         try {
-            Statement st = conn.createStatement();
-            st.execute(sql);
-            return true;
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            return false;
-        }
+			PreparedStatement preparedStmt = conn.prepareStatement(insertStatement);
+			preparedStmt.setString (1, username);
+    		preparedStmt.setString (2, special);
+    		preparedStmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+        
+        return true;
     }
-
+    
     public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
-                               String phoneNo, Employee.Gender gender, String ssn, String email, String address, Employee.Type type){
+            String phoneNo, Employee.Gender gender, String ssn, String email, String address, Employee.Type type) {
+    	String insertStatement = "insert into employee(username, first_name, middle_initial, last_name, phone, sex, ssn, email, address, type) "
+    			+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+    	PreparedStatement preparedStmt;
+    	try {
+    		preparedStmt = conn.prepareStatement(insertStatement);
+    		preparedStmt.setString (1, username);
+    		preparedStmt.setString (2, firstName);
+    		preparedStmt.setString (3, middleInit);
+    		preparedStmt.setString (4, lastName);
+    		preparedStmt.setString (5, phoneNo);
+    		preparedStmt.setString (6, gender.name());
+    		preparedStmt.setString (7, ssn);
+    		preparedStmt.setString (8, email);
+    		preparedStmt.setString (9, address);
+    		preparedStmt.setString (10, type.toString());
 
-        String sql = "INSERT INTO employee " +
-                "VALUES (" + formatString(username) + ", " +
-                formatString(firstName) + ", " +
-                formatString(middleInit) + ", " +
-                formatString(lastName) + ", " +
-                formatString(phoneNo) + ", " +
-                formatString(formatGender(gender)) + ", " +
-                formatString(ssn) + ", " +
-                formatString(email) + ", " +
-                formatString(address) + ", " +
-                formatString(formatType(type)) + ");";
-        try {
-            Statement st = conn.createStatement();
-            st.execute(sql);
-            return true;
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            return false;
-        }
+    		// execute the preparedstatement
+    		preparedStmt.execute();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return false;
+
+    	}
+
+    	return true;
     }
+
+//    public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
+//                               String phoneNo, Employee.Gender gender, String ssn, String email, String address, Employee.Type type){
+//
+//        String sql = "INSERT INTO employee " +
+//                "VALUES (" + formatString(username) + ", " +
+//                formatString(firstName) + ", " +
+//                formatString(middleInit) + ", " +
+//                formatString(lastName) + ", " +
+//                formatString(phoneNo) + ", " +
+//                formatString(formatGender(gender)) + ", " +
+//                formatString(ssn) + ", " +
+//                formatString(email) + ", " +
+//                formatString(address) + ", " +
+//                formatString(formatType(type)) + ");";
+//        try {
+//            Statement st = conn.createStatement();
+//            st.execute(sql);
+//            return true;
+//        }
+//        catch (SQLException e){
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     public Iterator<Patient> getAllPatients(){
         String sql = "SELECT first_name, last_name, insurance_ID FROM PATIENT";

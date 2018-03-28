@@ -1,6 +1,7 @@
 package Interface;
 
 import Model.*;
+import Model.Employee.Gender;
 
 import java.util.Scanner;
 
@@ -64,7 +65,7 @@ public class CommandLineAdmin extends CommandLine {
             System.out.println("Enter the doctor's specialization: ");
             String special = in.next();
             return hospital.addDoctor(username, firstName, null, lastName, null,
-                    null, ssn, null, null, type, special);
+                    Gender.O, ssn, null, null, type, special);
         }
 
         return hospital.addEmployee(username, firstName, null, lastName, null,
