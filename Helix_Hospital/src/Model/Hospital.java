@@ -112,7 +112,33 @@ public class Hospital {
             return false;
         }
     }
+    public Iterator<Employee> getAllDoctors(){
+        String sql = "SELECT first_name, last_name, username, type " +
+                     "FROM Doctor, Employee " +
+                     "WHERE Doctor.username = Employee.username";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
 
+            ArrayList<Employee> doctors = new ArrayList<>();
+
+            while(set.next()){
+                Employee doctor = new Employee();
+                doctor.setFirstName( set.getString("first_name") );
+                doctor.setLastName( set.getString("last_name") );
+                doctor.setUsername( set.getString("username") );
+                doctor.setType(Employee.Type.fromString(set.getString("type")));
+                doctors.add(doctor);
+            }
+            return doctors.iterator();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //do something with the sql
+        return null;
+    }
     public Iterator<Patient> getAllPatients(){
         String sql = "SELECT first_name, last_name, insurance_ID FROM PATIENT";
         try {
