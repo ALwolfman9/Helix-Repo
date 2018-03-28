@@ -46,16 +46,17 @@ public class CommandLineSupport extends CommandLineUser {
     }
 
     private void printHelp(){
+        System.out.println();
         System.out.println("Usage: patients/p/P | logout/l/L");
         System.out.println("patient/p/P\t\t\tView all patients");
-        System.out.println("new/n/N\t\t\tAdd a new patient");
+        System.out.println("new/n/N\t\t\t\tAdd a new patient");
         System.out.println("logout/l/L\t\t\tLogout of the Hospital application");
     }
 
     private boolean createPatient(){
         Scanner in = new Scanner(System.in);
 
-        String firstName, lastName, insuranceID;
+        String firstName, lastName, insuranceID, doctor;
 
         System.out.println("Create an Employee");
         System.out.println("Enter first name: ");
@@ -64,8 +65,15 @@ public class CommandLineSupport extends CommandLineUser {
         lastName = in.next();
         System.out.println("Enter insurance ID: ");
         insuranceID = in.next();
+        while(true) {
+            System.out.println("Enter the patient's doctor's username: ");
+            System.out.println("(Enter $l to list each doctor and their usernames)");
+            doctor = in.next();
+            if(doctor.equals("$l")) viewDoctors();
+            else break;
+        }
 
         return hospital.addPatient(firstName, lastName, null, null, null,
-                null, insuranceID, null, null);
+                null, insuranceID, null, null, doctor);
     }
 }

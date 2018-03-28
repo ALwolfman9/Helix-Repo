@@ -9,18 +9,20 @@ public class Patient {
     private String patientID;
     private String insuranceID;
     private String firstName;
-    private char middleInit;
+    private String middleInit;
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String address;
     private Gender gender;
     private String roomNumber;
     private String status;
+    private String doctor;
     //endregion
 
     //region constructors
-    Patient(String patientID, String insuranceID, String firstName, char middleInit, String lastName, String phoneNumber, String email, String address, Gender gender, String roomNumber, String status){
+    Patient(String patientID, String insuranceID, String firstName, String middleInit, String lastName,
+            String phoneNumber, String email, String address, Gender gender, String roomNumber,
+            String status, String doctor){
         this.patientID = patientID;
         this.insuranceID = insuranceID;
         this.firstName = firstName;
@@ -28,24 +30,24 @@ public class Patient {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.address = address;
         this.gender = gender;
         this.roomNumber = roomNumber;
         this.status = status;
+        this.doctor = doctor;
     }
 
     Patient(){
         this.patientID = null;
         this.insuranceID = null;
         this.firstName = null;
-        this.middleInit = '\u0000';
+        this.middleInit = null;
         this.lastName = null;
         this.phoneNumber = null;
         this.email = null;
-        this.address = null;
         this.gender = null;
         this.roomNumber = null;
         this.status = null;
+        this.doctor = null;
     }
     //endregion
 
@@ -82,11 +84,11 @@ public class Patient {
         this.firstName = firstName;
     }
 
-    public char getMiddleInit() {
+    public String getMiddleInit() {
         return middleInit;
     }
 
-    public void setMiddleInit(char middleInit) {
+    public void setMiddleInit(String middleInit) {
         this.middleInit = middleInit;
     }
 
@@ -114,14 +116,6 @@ public class Patient {
         this.email = email;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Gender getGender() {
         return gender;
     }
@@ -145,11 +139,19 @@ public class Patient {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getDoctor(){
+        return doctor;
+    }
+
+    public void setDoctor(String doctor){
+        this.doctor = doctor;
+    }
     // endregion
 
 
     @Override
     public String toString() {
-        return String.format("%30s%15s", firstName + " " + lastName, insuranceID);
+        return String.format("%30s%15s%30s", firstName + " " + lastName, insuranceID, doctor);
     }
 }

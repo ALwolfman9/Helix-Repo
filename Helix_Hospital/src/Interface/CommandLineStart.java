@@ -35,6 +35,7 @@ public class CommandLineStart extends CommandLine {
     }
 
     private void printHelp(){
+        System.out.println();
         System.out.println("Usage: login/l/L | quit/q/Q");
         System.out.println("login/l/L\t\t\tLog in to the Hospital Application");
         System.out.println("quit/q/Q\t\t\tQuit the Hospital Application");

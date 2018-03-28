@@ -1,6 +1,7 @@
 package Interface;
 
 import Model.*;
+import Model.Employee.Gender;
 
 import java.util.Scanner;
 
@@ -39,6 +40,7 @@ public class CommandLineAdmin extends CommandLine {
     }
 
     private void printHelp(){
+        System.out.println();
         System.out.println("Usage: employee/e/E | logout/l/L");
         System.out.println("employee/e/E\t\t\tAdd a new employee");
         System.out.println("logout/l/L\t\t\tLogout of the Hospital application");
@@ -64,7 +66,7 @@ public class CommandLineAdmin extends CommandLine {
             System.out.println("Enter the doctor's specialization: ");
             String special = in.next();
             return hospital.addDoctor(username, firstName, null, lastName, null,
-                    null, ssn, null, null, type, special);
+                    Gender.O, ssn, null, null, type, special);
         }
 
         return hospital.addEmployee(username, firstName, null, lastName, null,

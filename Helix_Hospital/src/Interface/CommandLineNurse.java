@@ -41,6 +41,7 @@ public class CommandLineNurse extends CommandLineUser {
     }
 
     private void printHelp(){
+        System.out.println();
         System.out.println("Usage: patients/p/P | logout/l/L");
         System.out.println("patient/p/P\t\t\tView all patients");
         System.out.println("logout/l/L\t\t\tLogout of the Hospital application");

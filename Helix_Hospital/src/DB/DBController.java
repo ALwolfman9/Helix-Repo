@@ -44,7 +44,9 @@ public class DBController {
 					+ "sex ENUM('M', 'F', 'O'),"
 					+ "insurance_ID CHAR(15),"
 					+ "phone CHAR(10),"
-					+ "status VARCHAR(20)" //enum? 
+					+ "status VARCHAR(20)," //enum?
+					+ "doctor VARCHAR(30), "
+					+ "FOREIGN KEY (doctor) REFERENCES DOCTOR(username)"
 					+ ");";
 			st.execute(createString);
 
