@@ -18,17 +18,23 @@ public abstract class CommandLineUser extends CommandLine{
 
     void viewPatients(){
         Iterator<Patient> patients = hospital.getAllPatients();
-        System.out.println(String.format("%30s%15s", "Name", "InsuranceID"));
-        while(patients.hasNext()){
-            System.out.println(patients.next().toString());
+        if(patients == null) System.out.println("There are no patients.");
+        else {
+            System.out.println(String.format("%30s%15s", "Name", "InsuranceID"));
+            while (patients.hasNext()) {
+                System.out.println(patients.next().toString());
+            }
         }
     }
 
     void viewDoctors(){
         Iterator<Employee> doctors = hospital.getAllDoctors();
-        System.out.println(String.format("%30s%15s%15s", "Name", "Username", "Type"));
-        while(doctors.hasNext()){
-            System.out.println(doctors.next().toString());
+        if(doctors == null) System.out.println("There are no doctors.");
+        else {
+            System.out.println(String.format("%30s%15s%15s", "Name", "Username", "Type"));
+            while (doctors.hasNext()) {
+                System.out.println(doctors.next().toString());
+            }
         }
     }
 

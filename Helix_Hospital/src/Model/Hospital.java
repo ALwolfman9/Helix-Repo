@@ -204,7 +204,7 @@ public class Hospital {
 //    }
 
     public Iterator<Patient> getAllPatients(){
-        String sql = "SELECT first_name, last_name, insurance_ID FROM PATIENT";
+        String sql = "SELECT first_name, last_name, insurance_ID, doctor FROM PATIENT";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
@@ -216,6 +216,7 @@ public class Hospital {
                 patient.setFirstName( set.getString("first_name") );
                 patient.setLastName( set.getString("last_name") );
                 patient.setInsuranceID( set.getString("insurance_Id") );
+                patient.setDoctor( set.getString("doctor") );
                 patients.add(patient);
             }
             return patients.iterator();
@@ -229,12 +230,24 @@ public class Hospital {
     }
 
     public Iterator<Patient> getPatientsOfDoctor(Employee doctor){
-        String sql = "SELECT first_name, last_name, insurance_ID "
+        String sql = "SELECT first_name, last_name, insurance_ID, doctor "
                 + "FROM Patient "
                 + "WHERE doctor = '" + doctor.getUsername() + "'"; //<-- needs to be doctor's username user.getName
         try {
             Statement st = conn.createStatement();
-            st.execute(sql);
+            ResultSet set = st.executeQuery(sql);
+
+            ArrayList<Patient> patients = new ArrayList<>();
+
+            while(set.next()){
+                Patient patient = new Patient();
+                patient.setFirstName( set.getString("first_name") );
+                patient.setLastName( set.getString("last_name") );
+                patient.setInsuranceID( set.getString("insurance_Id") );
+                patient.setDoctor( set.getString("doctor") );
+                patients.add(patient);
+            }
+            return patients.iterator();
         }
         catch (SQLException e){
             e.printStackTrace();

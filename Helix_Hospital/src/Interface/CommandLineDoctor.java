@@ -52,9 +52,12 @@ public class CommandLineDoctor extends CommandLineUser {
     @Override
     void viewPatients() {
         Iterator<Patient> patients = hospital.getPatientsOfDoctor(user);
-        System.out.println(String.format("          %30s%15s", "Name", "InsuranceID"));
-        while(patients.hasNext()){
-            System.out.println("Patient:" + patients.next().toString());
+        if(patients == null) System.out.println("You have no patients.");
+        else {
+            System.out.println(String.format("          %30s%15s", "Name", "InsuranceID"));
+            while (patients.hasNext()) {
+                System.out.println("Patient:" + patients.next().toString());
+            }
         }
     }
 }
