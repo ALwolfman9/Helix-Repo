@@ -9,18 +9,17 @@ public class Patient {
     private String patientID;
     private String insuranceID;
     private String firstName;
-    private char middleInit;
+    private String middleInit;
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String address;
     private Gender gender;
     private String roomNumber;
     private String status;
     //endregion
 
     //region constructors
-    Patient(String patientID, String insuranceID, String firstName, char middleInit, String lastName, String phoneNumber, String email, String address, Gender gender, String roomNumber, String status){
+    Patient(String patientID, String insuranceID, String firstName, String middleInit, String lastName, String phoneNumber, String email, String address, Gender gender, String roomNumber, String status){
         this.patientID = patientID;
         this.insuranceID = insuranceID;
         this.firstName = firstName;
@@ -28,7 +27,6 @@ public class Patient {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.address = address;
         this.gender = gender;
         this.roomNumber = roomNumber;
         this.status = status;
@@ -38,11 +36,10 @@ public class Patient {
         this.patientID = null;
         this.insuranceID = null;
         this.firstName = null;
-        this.middleInit = '\u0000';
+        this.middleInit = null;
         this.lastName = null;
         this.phoneNumber = null;
         this.email = null;
-        this.address = null;
         this.gender = null;
         this.roomNumber = null;
         this.status = null;
@@ -82,11 +79,11 @@ public class Patient {
         this.firstName = firstName;
     }
 
-    public char getMiddleInit() {
+    public String getMiddleInit() {
         return middleInit;
     }
 
-    public void setMiddleInit(char middleInit) {
+    public void setMiddleInit(String middleInit) {
         this.middleInit = middleInit;
     }
 
@@ -112,14 +109,6 @@ public class Patient {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public Gender getGender() {

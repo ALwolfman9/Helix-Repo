@@ -2,6 +2,7 @@ package Model;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -13,33 +14,61 @@ public class Hospital {
         this.conn = conn;
     }
 
-    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo,
-                              String email, Employee.Gender gender, String insurance_ID,
-                              String phoneNo, String status){
+//    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo,
+//                              String email, Employee.Gender gender, String insurance_ID,
+//                              String phoneNo, String status){
+//
+//        Random random = new Random();
+//        String patient_ID = Integer.toString(random.nextInt());
+//
+//        String sql = "INSERT INTO patient " +
+//                "VALUES (" + formatString(patient_ID) + ", " +
+//                formatString(roomNo) + ", " +
+//                formatString(firstName) + ", " +
+//                formatString(middleInit) + ", " +
+//                formatString(lastName) + ", " +
+//                formatString(email) + ", " +
+//                formatString(formatGender(gender)) + ", " +
+//                formatString(insurance_ID) + ", " +
+//                formatString(phoneNo) + ", " +
+//                formatString(status) + ");";
+//        try {
+//            Statement st = conn.createStatement();
+//            st.execute(sql);
+//            return true;
+//        }
+//        catch (SQLException e){
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
-        Random random = new Random();
-        String patient_ID = Integer.toString(random.nextInt());
+    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo, String email, Patient.Gender gender,
+            String insurance_ID, String phoneNo, String status) {
+    	String insertStatement = "insert into patient(room_number, first_name, middle_initial, last_name, email, sex, insurance_id, phone, status) "
+    			+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+    	PreparedStatement preparedStmt;
+    	try {
+    		preparedStmt = conn.prepareStatement(insertStatement);
+    		preparedStmt.setString (1, roomNo);
+    		preparedStmt.setString (2, firstName);
+    		preparedStmt.setString (3, middleInit);
+    		preparedStmt.setString (4, lastName);
+    		preparedStmt.setString (5, email);
+    		preparedStmt.setString (6, gender.toString());
+    		preparedStmt.setString (7, insurance_ID);
+    		preparedStmt.setString (8, phoneNo);
+    		preparedStmt.setString (9, status);
 
-        String sql = "INSERT INTO patient " +
-                "VALUES (" + formatString(patient_ID) + ", " +
-                formatString(roomNo) + ", " +
-                formatString(firstName) + ", " +
-                formatString(middleInit) + ", " +
-                formatString(lastName) + ", " +
-                formatString(email) + ", " +
-                formatString(formatGender(gender)) + ", " +
-                formatString(insurance_ID) + ", " +
-                formatString(phoneNo) + ", " +
-                formatString(status) + ");";
-        try {
-            Statement st = conn.createStatement();
-            st.execute(sql);
-            return true;
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            return false;
-        }
+    		// execute the preparedstatement
+    		preparedStmt.execute();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return false;
+
+    	}
+
+    	return true;
     }
 
     public Employee getEmployee(String username){
