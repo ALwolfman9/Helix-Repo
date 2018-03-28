@@ -16,7 +16,7 @@ public class CommandLineSupport extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=======================");
+        System.out.println("\n=================================");
         System.out.println(String.format("Welcome %s %s!", user.getFirstName(), user.getLastName()));
 
         while(true) {
@@ -58,17 +58,18 @@ public class CommandLineSupport extends CommandLineUser {
 
         String firstName, lastName, insuranceID, doctor;
 
-        System.out.println("Create an Employee");
+        System.out.println();
+        System.out.println("Create an Patient");
         System.out.println("Enter first name: ");
-        firstName = in.next();
+        firstName = in.nextLine();
         System.out.println("Enter last name: ");
-        lastName = in.next();
+        lastName = in.nextLine();
         System.out.println("Enter insurance ID: ");
-        insuranceID = in.next();
+        insuranceID = in.nextLine();
         while(true) {
             System.out.println("Enter the patient's doctor's username: ");
             System.out.println("(Enter $l to list each doctor and their usernames)");
-            doctor = in.next();
+            doctor = in.nextLine();
             if(doctor.equals("$l")) viewDoctors();
             else break;
         }

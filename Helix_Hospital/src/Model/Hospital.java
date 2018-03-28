@@ -175,7 +175,6 @@ public class Hospital {
         catch (SQLException e){
             e.printStackTrace();
         }
-        //do something with the sql
         return null;
     }
 //    public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
@@ -225,14 +224,13 @@ public class Hospital {
         catch (SQLException e){
             e.printStackTrace();
         }
-        //do something with the sql
         return null;
     }
 
     public Iterator<Patient> getPatientsOfDoctor(Employee doctor){
         String sql = "SELECT first_name, last_name, insurance_ID, doctor "
                 + "FROM Patient "
-                + "WHERE doctor = '" + doctor.getUsername() + "'"; //<-- needs to be doctor's username user.getName
+                + "WHERE doctor = '" + doctor.getUsername() + "'";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);

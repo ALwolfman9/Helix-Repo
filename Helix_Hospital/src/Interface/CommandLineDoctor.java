@@ -18,7 +18,7 @@ public class CommandLineDoctor extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=======================");
+        System.out.println("\n=================================");
         System.out.println(String.format("Welcome Dr. %s %s!", user.getFirstName(), user.getLastName()));
 
         while(true) {
@@ -54,9 +54,9 @@ public class CommandLineDoctor extends CommandLineUser {
         Iterator<Patient> patients = hospital.getPatientsOfDoctor(user);
         if(patients == null) System.out.println("You have no patients.");
         else {
-            System.out.println(String.format("          %30s%15s", "Name", "InsuranceID"));
+            System.out.println(String.format("%30s%15s%15s", "Name", "InsuranceID", "Doctor"));
             while (patients.hasNext()) {
-                System.out.println("Patient:" + patients.next().toString());
+                System.out.println(patients.next().toString());
             }
         }
     }

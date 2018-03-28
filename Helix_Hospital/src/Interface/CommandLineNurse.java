@@ -16,7 +16,7 @@ public class CommandLineNurse extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=======================");
+        System.out.println("\n=================================");
         System.out.println(String.format("Welcome Nurse %s %s!", user.getFirstName(), user.getLastName()));
 
         while(true) {

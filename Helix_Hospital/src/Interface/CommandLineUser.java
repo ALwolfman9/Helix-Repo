@@ -20,7 +20,7 @@ public abstract class CommandLineUser extends CommandLine{
         Iterator<Patient> patients = hospital.getAllPatients();
         if(patients == null) System.out.println("There are no patients.");
         else {
-            System.out.println(String.format("%30s%15s", "Name", "InsuranceID"));
+            System.out.println(String.format("%30s%15s%15s", "Name", "InsuranceID", "Doctor"));
             while (patients.hasNext()) {
                 System.out.println(patients.next().toString());
             }

@@ -15,7 +15,7 @@ public class CommandLineAdmin extends CommandLine {
     public void run(){
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=======================");
+        System.out.println("\n=================================");
         System.out.println("Welcome admin!");
 
         while(true) {
@@ -42,7 +42,7 @@ public class CommandLineAdmin extends CommandLine {
     private void printHelp(){
         System.out.println();
         System.out.println("Usage: employee/e/E | logout/l/L");
-        System.out.println("employee/e/E\t\t\tAdd a new employee");
+        System.out.println("employee/e/E\t\tAdd a new employee");
         System.out.println("logout/l/L\t\t\tLogout of the Hospital application");
     }
 
@@ -51,15 +51,16 @@ public class CommandLineAdmin extends CommandLine {
 
         String firstName, lastName, username, ssn;
         Employee.Type type;
+        System.out.println();
         System.out.println("Create an Employee");
         System.out.println("Enter first name: ");
-        firstName = in.next();
+        firstName = in.nextLine();
         System.out.println("Enter last name: ");
-        lastName = in.next();
+        lastName = in.nextLine();
         System.out.println("Enter username: ");
-        username = in.next();
+        username = in.nextLine();
         System.out.println("Enter the ssn: ");
-        ssn = in.next();
+        ssn = in.nextLine();
         type = getType();
 
         if(type == Employee.Type.DOCTOR) {
@@ -77,7 +78,7 @@ public class CommandLineAdmin extends CommandLine {
         Scanner in = new Scanner(System.in);
         while(true) {
             System.out.println("Enter the employee type (d for doctor, n for nurse, s for support): ");
-            String t = in.next();
+            String t = in.nextLine();
             switch (t) {
                 case "d":
                     return Employee.Type.DOCTOR;
