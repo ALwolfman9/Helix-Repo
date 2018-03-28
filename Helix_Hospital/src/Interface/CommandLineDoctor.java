@@ -18,7 +18,8 @@ public class CommandLineDoctor extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        //System.out.println(String.format("Welcome %s %s!", user.getFirstName(), user.getLastName()));
+        System.out.println("\n=======================");
+        System.out.println(String.format("Welcome Dr. %s %s!", user.getFirstName(), user.getLastName()));
 
         while(true) {
             printHelp();
@@ -30,6 +31,7 @@ public class CommandLineDoctor extends CommandLineUser {
                 case "P":
                 case"patients":
                     viewPatients();
+                    break;
                 case "l":
                 case "L":
                 case "logout":
@@ -41,6 +43,7 @@ public class CommandLineDoctor extends CommandLineUser {
     }
 
     private void printHelp(){
+        System.out.println();
         System.out.println("Usage: patients/p/P | logout/l/L");
         System.out.println("patient/p/P\t\t\tView all of your patients");
         System.out.println("logout/l/L\t\t\tLogout of the Hospital application");
@@ -49,8 +52,9 @@ public class CommandLineDoctor extends CommandLineUser {
     @Override
     void viewPatients() {
         Iterator<Patient> patients = hospital.getPatientsOfDoctor(user);
+        System.out.println(String.format("          %30s%15s", "Name", "InsuranceID"));
         while(patients.hasNext()){
-            System.out.println("Patient: " + patients.next().toString());
+            System.out.println("Patient:" + patients.next().toString());
         }
     }
 }

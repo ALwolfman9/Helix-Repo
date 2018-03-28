@@ -1,12 +1,10 @@
 package Model;
 import java.io.File;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Hospital {
     private Connection conn;
@@ -45,10 +43,22 @@ public class Hospital {
     }
 
     public Employee getEmployee(String username){
-        String sql = "SELECT * FROM employee WHERE username = '" + username + "';";
+        String sql = "SELECT first_name, last_name, username, type FROM employee WHERE username = '" + username + "';";
         try {
             Statement st = conn.createStatement();
-            st.execute(sql);
+            ResultSet result = st.executeQuery(sql);
+
+            Employee emp = new Employee();
+
+            result.next();
+
+            emp.setFirstName(result.getString("first_name"));
+            emp.setLastName(result.getString("last_name"));
+            emp.setUsername(result.getString("username"));
+            emp.setType(Employee.Type.fromString(result.getString("type")));
+
+            return emp;
+
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -104,13 +114,22 @@ public class Hospital {
     }
 
     public Iterator<Patient> getAllPatients(){
-        String sql = "SELECT "
-                + "first_name, last_name, gender, patient_ID "
-                + "FROM "
-                + "patient;";
+        String sql = "SELECT first_name, last_name, insurance_ID FROM PATIENT";
         try {
             Statement st = conn.createStatement();
-            st.execute(sql);
+            ResultSet set = st.executeQuery(sql);
+
+            ArrayList<Patient> patients = new ArrayList<>();
+
+            while(set.next()){
+                Patient patient = new Patient();
+                patient.setFirstName( set.getString("first_name") );
+                patient.setLastName( set.getString("last_name") );
+                patient.setInsuranceID( set.getString("insurance_Id") );
+                patients.add(patient);
+            }
+            return patients.iterator();
+
         }
         catch (SQLException e){
             e.printStackTrace();

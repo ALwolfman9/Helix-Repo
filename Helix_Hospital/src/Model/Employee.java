@@ -44,9 +44,28 @@ public class Employee {
 
     //region enums
     public enum Type{
-        DOCTOR,
-        NURSE,
-        SUPPORT;
+        DOCTOR("Doctor"),
+        NURSE("Nurse"),
+        SUPPORT("Support"),
+        ERROR("Error");
+
+        private String type;
+
+        Type(String type){
+            this.type = type;
+        }
+
+        public String toString(){
+            return type;
+        }
+
+        public static Type fromString(String s){
+            if(s.equals("Doctor")) return Type.DOCTOR;
+            if(s.equals("Nurse")) return Type.NURSE;
+            if(s.equals("Support")) return Type.SUPPORT;
+            else return Type.ERROR;
+
+        }
     }
 
     public enum Gender{

@@ -16,7 +16,8 @@ public class CommandLineNurse extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        //System.out.println(String.format("Welcome %s %s!", user.getFirstName(), user.getLastName()));
+        System.out.println("\n=======================");
+        System.out.println(String.format("Welcome Nurse %s %s!", user.getFirstName(), user.getLastName()));
 
         while(true) {
             printHelp();
@@ -28,6 +29,7 @@ public class CommandLineNurse extends CommandLineUser {
                 case "P":
                 case"patients":
                     viewPatients();
+                    break;
                 case "l":
                 case "L":
                 case "logout":

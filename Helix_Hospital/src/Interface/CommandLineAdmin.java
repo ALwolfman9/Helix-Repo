@@ -14,6 +14,7 @@ public class CommandLineAdmin extends CommandLine {
     public void run(){
         Scanner in = new Scanner(System.in);
 
+        System.out.println("\n=======================");
         System.out.println("Welcome admin!");
 
         while(true) {

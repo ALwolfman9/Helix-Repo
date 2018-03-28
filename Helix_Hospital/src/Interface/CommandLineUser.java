@@ -17,8 +17,9 @@ public abstract class CommandLineUser extends CommandLine{
 
     void viewPatients(){
         Iterator<Patient> patients = hospital.getAllPatients();
+        System.out.println(String.format("          %30s%15s", "Name", "InsuranceID"));
         while(patients.hasNext()){
-            System.out.println("Patient: " + patients.next().toString());
+            System.out.println("Patient:" + patients.next().toString());
         }
     }
 

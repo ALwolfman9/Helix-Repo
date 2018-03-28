@@ -35,7 +35,7 @@ public class DBController {
 			st.execute(createString);
 
 			createString = "CREATE TABLE IF NOT EXISTS patient ("
-					+ "patient_ID CHAR(10) NOT NULL PRIMARY KEY,"
+					+ "patient_ID CHAR(15) NOT NULL PRIMARY KEY,"
 					+ "room_number CHAR(5),"
 					+ "first_name VARCHAR(20) NOT NULL,"
 					+ "middle_initial VARCHAR(1),"

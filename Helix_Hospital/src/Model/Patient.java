@@ -146,4 +146,10 @@ public class Patient {
         this.status = status;
     }
     // endregion
+
+
+    @Override
+    public String toString() {
+        return String.format("%30s%15s", firstName + " " + lastName, insuranceID);
+    }
 }
