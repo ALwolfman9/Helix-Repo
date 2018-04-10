@@ -82,16 +82,14 @@ public class Hospital {
         try {
             Statement st = conn.createStatement();
             ResultSet result = st.executeQuery(sql);
-
+            if (!result.next()){
+                return null;
+            }
             Employee emp = new Employee();
-
-            result.next();
-
             emp.setFirstName(result.getString("first_name"));
             emp.setLastName(result.getString("last_name"));
             emp.setUsername(result.getString("username"));
             emp.setType(Employee.Type.fromString(result.getString("type")));
-
             return emp;
 
         }
@@ -176,6 +174,19 @@ public class Hospital {
             e.printStackTrace();
         }
         return null;
+    }
+    public boolean doctorExists(String username){
+        String sql = "SELECT username FROM Doctor WHERE username = ?";
+        try {
+            PreparedStatement preparedStmt = conn.prepareStatement(sql);
+            preparedStmt.setString (1, username);
+            ResultSet set = preparedStmt.executeQuery();
+            return (set.next()) ? true : false;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 //    public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
 //                               String phoneNo, Employee.Gender gender, String ssn, String email, String address, Employee.Type type){

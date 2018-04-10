@@ -70,8 +70,15 @@ public class CommandLineSupport extends CommandLineUser {
             System.out.println("Enter the patient's doctor's username: ");
             System.out.println("(Enter $l to list each doctor and their usernames)");
             doctor = in.nextLine();
-            if(doctor.equals("$l")) viewDoctors();
-            else break;
+            if(doctor.equals(new String("$1"))) {
+                viewDoctors();
+            }
+            else if (!hospital.doctorExists(doctor)) {
+                System.out.println("A doctor with the given username does not exist");
+            }
+            else{
+                break;
+            }
         }
 
         return hospital.addPatient(firstName, lastName, null, null, null,

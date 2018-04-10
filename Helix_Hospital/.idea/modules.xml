@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Helix.iml" filepath="$PROJECT_DIR$/Helix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Helix_Hospital.iml" filepath="$PROJECT_DIR$/Helix_Hospital.iml" />
     </modules>
   </component>
 </project>
