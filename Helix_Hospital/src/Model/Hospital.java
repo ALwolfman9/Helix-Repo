@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Hospital {
@@ -145,6 +148,91 @@ public class Hospital {
 
     	return true;
     }
+    
+    public boolean addAppointment(String username, String patientID, LocalDateTime dateTime, String reasonForVisit) {
+    	String sql = "insert into appointment(username, patient_id, date, reason_for_visit) "
+    			+ "+ VALUES(?,?,?,?)";
+    	PreparedStatement preparedStmt;
+    	try {
+    		preparedStmt = conn.prepareStatement(sql);
+    		preparedStmt.setString(1, username);
+    		preparedStmt.setString(2, patientID);
+    		Timestamp ts = Timestamp.valueOf(dateTime.toString());
+    		preparedStmt.setTimestamp(3, ts);
+    		preparedStmt.setString(4, reasonForVisit);
+    		preparedStmt.execute();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return false;
+
+    	}
+    	return true;
+    }
+    
+    public boolean addPrescription(String patientID, String prescriptionID, String drugName, String dosage, String duration) {
+    	String sql = "insert into prescription(patient_ID, prescription_ID, drup_name, dosage, duration) "
+    			+ "+ VALUES(?,?,?,?,?)";
+    	PreparedStatement preparedStmt;
+    	try {
+    		preparedStmt = conn.prepareStatement(sql);
+    		preparedStmt.setString(1, patientID);
+    		preparedStmt.setString(2, prescriptionID);
+    		preparedStmt.setString(3, drugName);
+    		preparedStmt.setString(4, dosage);
+    		preparedStmt.setString(5, duration);
+    		preparedStmt.execute();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return false;
+
+    	}
+    	return true;
+    }
+    
+    public boolean addMedicalHistory (String patientID, String bloodType, String allergies, 
+    		String medications, String pastConditions, String familyHistory) {
+    	String sql = "insert into medical_history(patient_ID, blood_type, family_history, past_Conditions, allergies, medications) "
+    			+ "+ VALUES(?,?,?,?,?,?)";
+    	PreparedStatement preparedStmt;
+    	try {
+    		preparedStmt = conn.prepareStatement(sql);
+    		preparedStmt.setString(1, patientID);
+    		preparedStmt.setString(2, bloodType);
+    		preparedStmt.setString(3, familyHistory);
+    		preparedStmt.setString(4, pastConditions);
+    		preparedStmt.setString(5, allergies);
+    		preparedStmt.setString(6, medications);
+    		preparedStmt.execute();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return false;
+
+    	}
+    	
+    	return true;
+    }
+    
+    public boolean addMedicalRecord (String username, String patientID, LocalDateTime dateTime, String notes) {
+    	String sql = "insert into medical_record(username, patient_id, date, notes) "
+    			+ "+ VALUES(?,?,?,?)";
+    	PreparedStatement preparedStmt;
+    	try {
+    		preparedStmt = conn.prepareStatement(sql);
+    		preparedStmt.setString(1, username);
+    		preparedStmt.setString(2, patientID);
+    		Timestamp ts = Timestamp.valueOf(dateTime.toString());
+    		preparedStmt.setTimestamp(3, ts);
+    		preparedStmt.setString(4, notes);
+    		preparedStmt.execute();
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return false;
+
+    	}
+    	return true;
+    }
+    
+    
     public Iterator<Employee> getAllDoctors(){
         String sql = "SELECT first_name, last_name, Doctor.username, type " +
                      "FROM Doctor, Employee " +
@@ -184,30 +272,6 @@ public class Hospital {
             return false;
         }
     }
-//    public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
-//                               String phoneNo, Employee.Gender gender, String ssn, String email, String address, Employee.Type type){
-//
-//        String sql = "INSERT INTO employee " +
-//                "VALUES (" + formatString(username) + ", " +
-//                formatString(firstName) + ", " +
-//                formatString(middleInit) + ", " +
-//                formatString(lastName) + ", " +
-//                formatString(phoneNo) + ", " +
-//                formatString(formatGender(gender)) + ", " +
-//                formatString(ssn) + ", " +
-//                formatString(email) + ", " +
-//                formatString(address) + ", " +
-//                formatString(formatType(type)) + ");";
-//        try {
-//            Statement st = conn.createStatement();
-//            st.execute(sql);
-//            return true;
-//        }
-//        catch (SQLException e){
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
 
     public Iterator<Patient> getAllPatients(){
         String sql = "SELECT first_name, last_name, insurance_ID, doctor FROM PATIENT";
