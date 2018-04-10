@@ -35,7 +35,7 @@ public class DBController {
 			st.execute(createString);
 
 			createString = "CREATE TABLE IF NOT EXISTS patient ("
-					+ "patient_ID CHAR(15) NOT NULL PRIMARY KEY,"
+					+ "patient_ID bigint auto_increment,"
 					+ "room_number CHAR(5),"
 					+ "first_name VARCHAR(20) NOT NULL,"
 					+ "middle_initial VARCHAR(1),"
@@ -52,7 +52,7 @@ public class DBController {
 
 			createString = "CREATE TABLE IF NOT EXISTS appointment("
 					+ "username VARCHAR(30) NOT NULL, "
-					+ "patient_ID CHAR(10) NOT NULL, "
+					+ "patient_ID bigint NOT NULL, "
 					+ "date DATETIME NOT NULL, "
 					+ "reason_for_visit VARCHAR(255), "
 					+ "FOREIGN KEY (username) REFERENCES EMPLOYEE(username), "
@@ -63,7 +63,7 @@ public class DBController {
 			st.execute(alterString);
 
 			createString = "CREATE TABLE IF NOT EXISTS prescription("
-					+ "patient_ID CHAR(10) NOT NULL,"
+					+ "patient_ID bigint NOT NULL,"
 					+ "prescription_ID VARCHAR(20) NOT NULL,"
 					+ "drug_name VARCHAR(30) NOT NULL,"
 					+ "dosage VARCHAR(30) NOT NULL,"
@@ -76,7 +76,7 @@ public class DBController {
 
 			createString = "CREATE TABLE IF NOT EXISTS medical_record ("
 					+ "username VARCHAR(30) NOT NULL,"
-					+ "patient_ID CHAR(10) NOT NULL,"
+					+ "patient_ID bigint NOT NULL,"
 					+ "date DATETIME NOT NULL,"
 					+ "notes VARCHAR(255),"
 					+ "FOREIGN KEY (username) REFERENCES EMPLOYEE(username),"
@@ -87,7 +87,7 @@ public class DBController {
 			st.execute(alterString);
 
 			createString = "CREATE TABLE IF NOT EXISTS medical_history("
-					+ "patient_ID CHAR(10) PRIMARY KEY,"
+					+ "patient_ID bigint PRIMARY KEY,"
 					+ "blood_type VARCHAR(3),"
 					+ "family_history VARCHAR(255),"
 					+ "past_conditions VARCHAR(255),"

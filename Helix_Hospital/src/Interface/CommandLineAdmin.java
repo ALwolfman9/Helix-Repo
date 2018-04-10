@@ -57,8 +57,14 @@ public class CommandLineAdmin extends CommandLine {
         firstName = in.nextLine();
         System.out.println("Enter last name: ");
         lastName = in.nextLine();
-        System.out.println("Enter username: ");
-        username = in.nextLine();
+        while (true) {
+            System.out.println("Enter username: ");
+            username = in.nextLine();
+            if (username.matches("[A-Za-z0-9]+")) {
+                break;
+            }
+            System.out.println("Username must be alphanumeric");
+        }
         System.out.println("Enter the ssn: ");
         ssn = in.nextLine();
         type = getType();

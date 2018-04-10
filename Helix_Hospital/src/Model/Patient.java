@@ -152,6 +152,6 @@ public class Patient {
 
     @Override
     public String toString() {
-        return String.format("%30s%15s%30s", firstName + " " + lastName, insuranceID, doctor);
+        return String.format("%4s%30s%15s%30s", patientID, firstName + " " + lastName, insuranceID, doctor);
     }
 }

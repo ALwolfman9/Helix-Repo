@@ -44,27 +44,23 @@ public class Hospital {
 
     public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo, String email,
                               Patient.Gender gender, String insurance_ID, String phoneNo, String status, String doctor) {
-    	String insertStatement = "insert into patient(patient_id, room_number, first_name, middle_initial, " +
+    	String insertStatement = "insert into patient(room_number, first_name, middle_initial, " +
                 "last_name, email, sex, insurance_id, phone, status, doctor) "
-    			+ "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+    			+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
     	PreparedStatement preparedStmt;
-
-    	Random random = new Random();
-        String patientID = Integer.toString(random.nextInt());
 
     	try {
     		preparedStmt = conn.prepareStatement(insertStatement);
-    		preparedStmt.setString(1, patientID);
-    		preparedStmt.setString (2, roomNo);
-    		preparedStmt.setString (3, firstName);
-    		preparedStmt.setString (4, middleInit);
-    		preparedStmt.setString (5, lastName);
-    		preparedStmt.setString (6, email);
-    		preparedStmt.setString (7, gender == null ? null : gender.name());
-    		preparedStmt.setString (8, insurance_ID);
-    		preparedStmt.setString (9, phoneNo);
-    		preparedStmt.setString (10, status);
-    		preparedStmt.setString(11, doctor);
+    		preparedStmt.setString (1, roomNo);
+    		preparedStmt.setString (2, firstName);
+    		preparedStmt.setString (3, middleInit);
+    		preparedStmt.setString (4, lastName);
+    		preparedStmt.setString (5, email);
+    		preparedStmt.setString (6, gender == null ? null : gender.name());
+    		preparedStmt.setString (7, insurance_ID);
+    		preparedStmt.setString (8, phoneNo);
+    		preparedStmt.setString (9, status);
+    		preparedStmt.setString(10, doctor);
 
     		// execute the preparedstatement
     		preparedStmt.execute();
@@ -239,7 +235,7 @@ public class Hospital {
     }
 
     public Iterator<Patient> getPatientsOfDoctor(Employee doctor){
-        String sql = "SELECT first_name, last_name, insurance_ID, doctor "
+        String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor "
                 + "FROM Patient "
                 + "WHERE doctor = '" + doctor.getUsername() + "'";
         try {
@@ -250,6 +246,7 @@ public class Hospital {
 
             while(set.next()){
                 Patient patient = new Patient();
+                patient.setPatientID( set.getString("patient_ID") );
                 patient.setFirstName( set.getString("first_name") );
                 patient.setLastName( set.getString("last_name") );
                 patient.setInsuranceID( set.getString("insurance_Id") );
