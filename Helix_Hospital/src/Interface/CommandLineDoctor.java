@@ -113,6 +113,7 @@ public class CommandLineDoctor extends CommandLineUser {
                 case "I":
                 case "info":
                     viewPatientInfo(patient);
+                    break;
                 case "h":
                 case "H":
                 case "history":
@@ -127,10 +128,12 @@ public class CommandLineDoctor extends CommandLineUser {
                 case "R":
                 case "records":
                     viewPatientRecords(patient);
+                    break;
                 case "p":
                 case "P":
                 case "prescriptions":
                     viewPatientPrescriptions(patient);
+                    break;
                 case "q":
                 case "Q":
                 case "quit":

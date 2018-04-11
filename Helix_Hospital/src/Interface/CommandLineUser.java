@@ -178,6 +178,7 @@ public abstract class CommandLineUser extends CommandLine{
                 case "A":
                 case "add":
                     addAppointment(patient);
+                    break;
                 case "q":
                 case "Q":
                 case "quit":
