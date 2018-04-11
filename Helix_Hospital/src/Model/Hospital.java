@@ -211,7 +211,7 @@ public class Hospital {
     	
     	return true;
     }
-    
+
     public boolean addMedicalRecord (String username, String patientID, LocalDateTime dateTime, String notes) {
     	String sql = "insert into medical_record(username, patient_id, date, notes) "
     			+ "+ VALUES(?,?,?,?)";
@@ -231,8 +231,7 @@ public class Hospital {
     	}
     	return true;
     }
-    
-    
+
     public Iterator<Employee> getAllDoctors(){
         String sql = "SELECT first_name, last_name, Doctor.username, type " +
                      "FROM Doctor, Employee " +
@@ -259,6 +258,7 @@ public class Hospital {
         }
         return null;
     }
+
     public boolean doctorExists(String username){
         String sql = "SELECT username FROM Doctor WHERE username = ?";
         try {
@@ -274,7 +274,7 @@ public class Hospital {
     }
 
     public Iterator<Patient> getAllPatients(){
-        String sql = "SELECT first_name, last_name, insurance_ID, doctor FROM PATIENT";
+        String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor FROM PATIENT";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
@@ -283,6 +283,7 @@ public class Hospital {
 
             while(set.next()){
                 Patient patient = new Patient();
+                patient.setPatientID( set.getString("patient_ID") );
                 patient.setFirstName( set.getString("first_name") );
                 patient.setLastName( set.getString("last_name") );
                 patient.setInsuranceID( set.getString("insurance_Id") );
@@ -323,6 +324,23 @@ public class Hospital {
             e.printStackTrace();
         }
         //do something with the sql
+        return null;
+    }
+
+    // TODO actually make these methods
+    public MedicalHistory getMedicalHistory(Patient patient) {
+        return null;
+    }
+
+    public Iterator<Appointment> getAppointmentsOfPatient(String patientId){
+        return null;
+    }
+
+    public Iterator<MedicalRecord> getRecordsOfPatient(String patientId){
+        return null;
+    }
+
+    public Iterator<Prescription> getPrescriptionsOfPatient(String patientId) {
         return null;
     }
 

@@ -2,6 +2,7 @@ package Interface;
 
 import Model.Employee;
 import Model.Hospital;
+import Model.Patient;
 
 import java.util.Scanner;
 
@@ -23,7 +24,6 @@ public class CommandLineSupport extends CommandLineUser {
             printHelp();
             String cmd = in.next();
 
-            // TODO add ability to modify patients
             switch(cmd){
                 case "n":
                 case "N":
@@ -68,9 +68,9 @@ public class CommandLineSupport extends CommandLineUser {
         insuranceID = in.nextLine();
         while(true) {
             System.out.println("Enter the patient's doctor's username: ");
-            System.out.println("(Enter $l to list each doctor and their usernames)");
+            System.out.println("(Enter $list to list each doctor and their usernames)");
             doctor = in.nextLine();
-            if(doctor.equals(new String("$1"))) {
+            if(doctor.equals("$1ist")) {
                 viewDoctors();
             }
             else if (!hospital.doctorExists(doctor)) {
@@ -81,7 +81,47 @@ public class CommandLineSupport extends CommandLineUser {
             }
         }
 
+        //TODO add the rest of this info
         return hospital.addPatient(firstName, lastName, null, null, null,
                 null, insuranceID, null, null, doctor);
+    }
+    void viewPatient(Patient patient) {
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("\n=================================");
+        System.out.println(String.format("Profile of %s %s (Patient ID: %s)",
+                patient.getFirstName(), patient.getLastName(), patient.getPatientID()));
+
+        while(true) {
+            printPatientViewHelp(patient);
+            String cmd = in.nextLine();
+            String[] cmdArgs = cmd.split("\\s+");
+            switch(cmdArgs[0]){
+                case "i":
+                case "I":
+                case "info":
+                    viewPatientInfo(patient);
+                    break;
+                case "a":
+                case "A":
+                case "appointments":
+                    viewPatientAppointments(patient);
+                    break;
+                case "q":
+                case "Q":
+                case "quit":
+                    return;
+                default:
+                    System.out.println("That command/ID was not recognized");
+            }
+        }
+    }
+    void printPatientViewHelp(Patient p){
+        String name = p.getFirstName();
+        System.out.println();
+        System.out.println("Usage: info/i/I | appointments/a/A | quit/q/Q");
+        System.out.println(String.format("info/i/I\t\t\tView, %s's Patient Info", name));
+        System.out.println(String.format("appointments/a/A\t\t\tView, edit, and add to %s's Appointments", name));
+        System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 }
