@@ -157,12 +157,17 @@ public class CommandLineDoctor extends CommandLineUser {
     private void viewPatientRecords(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        Iterator<MedicalRecord> records = hospital.getRecordsOfPatient(patient.getPatientID());
+        List<MedicalRecord> records = hospital.getRecordsOfPatient(patient.getPatientID());
 
-        if(records == null) System.out.println("There are no appointments.");
-        else //TODO Print out the records
+        if(records == null) System.out.println("There are no records.");
+        else {
+            for(MedicalRecord record : records){
+                //TODO create MedicalRecord toString for it to print correctly
+                System.out.println(record);
+            }
+        }
 
-            System.out.println("\n=================================");
+        System.out.println("\n=================================");
         System.out.println(String.format(""));
         while(true) {
             printPatientRecordsHelp();
@@ -212,12 +217,17 @@ public class CommandLineDoctor extends CommandLineUser {
     private void viewPatientPrescriptions(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        Iterator<Prescription> prescriptions = hospital.getPrescriptionsOfPatient(patient.getPatientID());
+        List<Prescription> prescriptions = hospital.getPrescriptionsOfPatient(patient.getPatientID());
 
         if(prescriptions == null) System.out.println("There are no prescriptions.");
-        else //TODO Print out the records
+        else {
+            for(Prescription prescription : prescriptions){
+                //TODO create Prescription toString for it to print correctly
+                System.out.println(prescription);
+            }
+        }
 
-            System.out.println("\n=================================");
+        System.out.println("\n=================================");
         System.out.println(String.format(""));
         while(true) {
             printPatientPrescriptionsHelp();

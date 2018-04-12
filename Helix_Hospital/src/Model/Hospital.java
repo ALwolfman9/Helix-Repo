@@ -385,9 +385,6 @@ public class Hospital {
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
-            if (!set.next()) {
-                return null;
-            }
 
             List<Appointment> appointments = new ArrayList<>();
 
@@ -409,11 +406,59 @@ public class Hospital {
         return null;
     }
 
-    public Iterator<MedicalRecord> getRecordsOfPatient(String patientId){
+    public List<MedicalRecord> getRecordsOfPatient(String patientId){
+        String sql = "SELECT username, patient_ID, date, notes "
+                + "FROM medical_record "
+                + "WHERE patient_ID = '" + patientId + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            List<MedicalRecord> medicalRecords = new ArrayList<>();
+
+            while(set.next()){
+                MedicalRecord medicalRecord = new MedicalRecord();
+                medicalRecord.setUsername( set.getString("username") );
+                medicalRecord.setPatientID( set.getString("patient_ID") );
+                medicalRecord.setDateTime( set.getString("date") );
+                medicalRecord.setNotes( set.getString("notes") );
+
+                medicalRecords.add(medicalRecord);
+            }
+            return medicalRecords;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //records not found
         return null;
     }
 
-    public Iterator<Prescription> getPrescriptionsOfPatient(String patientId) {
+    public List<Prescription> getPrescriptionsOfPatient(String patientId) {
+        String sql = "SELECT patient_ID, prescription_ID, drug_name, dosage, duration "
+                + "FROM medical_record "
+                + "WHERE patient_ID = '" + patientId + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            List<Prescription> prescriptions = new ArrayList<>();
+
+            while(set.next()){
+                Prescription prescription = new Prescription();
+                prescription.setPatientID( set.getString("patient_ID") );
+                prescription.setPrescriptionID( set.getString("prescription_ID") );
+                prescription.setDrugName( set.getString("drug_name") );
+                prescription.setDosage( set.getString("dosage") );
+                prescription.setDuration( set.getString("duration") );
+                prescriptions.add(prescription);
+            }
+            return prescriptions;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //prescriptions not found
         return null;
     }
 
