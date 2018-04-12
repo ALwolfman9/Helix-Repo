@@ -205,13 +205,20 @@ public abstract class CommandLineUser extends CommandLine{
         else {
             while (true) {
                 System.out.println("Enter the username of the doctor this appointment is with: ");
-                System.out.println("(Enter $list to list each doctor and their usernames)");
+                System.out.println("(Enter $list to list each doctor and their usernames | " +
+                        "Enter $quit to cancel appointment)");
                 doctor = in.nextLine();
                 if (doctor.equals("$1ist")) {
                     viewDoctors();
                 } else if (!hospital.doctorExists(doctor)) {
                     System.out.println("A doctor with the given username does not exist");
-                } else {
+                } else if (doctor.equals("$quit")){
+                    //there are no doctors to choose from or canceling appointment creation
+                    System.out.println("Quitting appointment creation");
+                    return;
+                }
+                else{
+                    //selected a valid doctor, breaking out of while loop
                     break;
                 }
             }
