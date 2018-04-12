@@ -349,8 +349,7 @@ public class Hospital {
         //do something with the sql
         return null;
     }
-
-    // TODO actually make these methods
+    
     public MedicalHistory getMedicalHistory(Patient patient) {
         String sql = "SELECT patient_ID, blood_type, family_history, past_conditions, allergies, medications "
                 + "FROM medical_history "
