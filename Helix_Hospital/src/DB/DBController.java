@@ -52,7 +52,7 @@ public class DBController {
 			createString = "CREATE TABLE IF NOT EXISTS appointment("
 					+ "username VARCHAR(30) NOT NULL, "
 					+ "patient_ID bigint NOT NULL, "
-					+ "date DATETIME NOT NULL, "
+					+ "date TIMESTAMP NOT NULL, "
 					+ "reason_for_visit VARCHAR(255), "
 					+ "FOREIGN KEY (username) REFERENCES EMPLOYEE(username), "
 					+ "FOREIGN KEY (patient_ID) REFERENCES PATIENT(patient_ID), "

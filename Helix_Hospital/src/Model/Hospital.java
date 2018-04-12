@@ -143,13 +143,13 @@ public class Hospital {
     
     public boolean addAppointment(String username, String patientID, LocalDateTime dateTime, String reasonForVisit) {
     	String sql = "insert into appointment(username, patient_id, date, reason_for_visit) "
-    			+ "+ VALUES(?,?,?,?)";
+    			+ " VALUES(?,?,?,?)";
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(sql);
     		preparedStmt.setString(1, username);
     		preparedStmt.setString(2, patientID);
-    		Timestamp ts = Timestamp.valueOf(dateTime.toString());
+    		Timestamp ts = Timestamp.valueOf(dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     		preparedStmt.setTimestamp(3, ts);
     		preparedStmt.setString(4, reasonForVisit);
     		preparedStmt.execute();
@@ -163,7 +163,7 @@ public class Hospital {
     
     public boolean addPrescription(String patientID, String drugName, String dosage, String duration) {
     	String sql = "insert into prescription(patient_ID, prescription_ID, drup_name, dosage, duration) "
-    			+ "+ VALUES(?,?,?,?)";
+    			+ " VALUES(?,?,?,?)";
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(sql);
@@ -183,7 +183,7 @@ public class Hospital {
     public boolean addMedicalHistory (String patientID, String bloodType, String allergies, 
     		String medications, String pastConditions, String familyHistory) {
     	String sql = "insert into medical_history(patient_ID, blood_type, family_history, past_Conditions, allergies, medications) "
-    			+ "+ VALUES(?,?,?,?,?,?)";
+    			+ " VALUES(?,?,?,?,?,?)";
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(sql);
@@ -205,7 +205,7 @@ public class Hospital {
 
     public boolean addMedicalRecord (String username, String patientID, LocalDateTime dateTime, String notes) {
     	String sql = "insert into medical_record(username, patient_id, date, notes) "
-    			+ "+ VALUES(?,?,?,?)";
+    			+ " VALUES(?,?,?,?)";
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(sql);

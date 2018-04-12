@@ -3,6 +3,9 @@ package Interface;
 import Model.*;
 import com.sun.org.apache.xpath.internal.SourceTree;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -89,7 +92,8 @@ public abstract class CommandLineUser extends CommandLine{
 
     private void printPatientInfoHelp(){
         System.out.println();
-        System.out.println("Usage: quit/q/Q");
+        System.out.println("Usage: e/E/edit | quit/q/Q");
+        System.out.println("Usage: edit/e/E\t\t\tEdit the patient info");
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 
@@ -97,7 +101,12 @@ public abstract class CommandLineUser extends CommandLine{
         Scanner in = new Scanner(System.in);
 
         MedicalHistory medicalHistory = hospital.getMedicalHistory(patient);
-        if(medicalHistory == null) System.out.println(patient.getFirstName() + " has no Medical History yet");
+        if(medicalHistory == null) {
+            System.out.println(patient.getFirstName() + " has no Medical History yet. Do you want to add one? (y/n)");
+            String question = in.next();
+            if(question.equals("y")) addMedicalHistory(patient);
+            else return;
+        }
         else System.out.println(medicalHistory.toString());
 
         System.out.println("\n=================================");
@@ -107,10 +116,10 @@ public abstract class CommandLineUser extends CommandLine{
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
             switch(cmdArgs[0]){
-                case "a":
-                case "A":
-                case "add":
-                    addMedicalHistory(patient);
+                case "e":
+                case "E":
+                case "edit":
+                    editMedicalHistory(patient, medicalHistory);
                     break;
                 case "q":
                 case "Q":
@@ -146,6 +155,81 @@ public abstract class CommandLineUser extends CommandLine{
 
         hospital.addMedicalHistory(patient.getPatientID(), bloodType, allergies,
                 medications, existingConditions, familyHistory);
+    }
+
+    private void editMedicalHistory(Patient patient, MedicalHistory medicalHistory){
+        Scanner in = new Scanner(System.in);
+        String familyHistory, existingConditions, allergies, medications;
+
+        System.out.println();
+        System.out.println("Edit Medical History");
+
+        System.out.println("Current family history: " + medicalHistory.getFamilyHistory());
+        System.out.println("Add to family history: (If no changes, hit enter)");
+        familyHistory = in.nextLine();
+        if(!familyHistory.equals(""))
+            medicalHistory.setFamilyHistory(medicalHistory.getFamilyHistory() + "\n" +  familyHistory);
+
+        System.out.println("Past conditions and injuries: " + medicalHistory.getPastConditions());
+        System.out.println("Add to past conditions and injuries: (If no changes, hit enter)");
+        existingConditions = in.nextLine();
+        if(!existingConditions.equals(""))
+            medicalHistory.setPastConditions(medicalHistory.getPastConditions() + "\n" + existingConditions);
+
+        System.out.println("Current allergies: " + medicalHistory.getAllergies());
+        loop:
+        while(true) {
+            System.out.println("To add to this list, enter 'a'.\n" +
+                    "To delete and replace the list, enter 'r'.\n" +
+                    "If there are no changes, hit enter.");
+            allergies = in.nextLine();
+
+            switch (allergies) {
+                case "a":
+                    System.out.println("Enter the allergies to add to the list: ");
+                    allergies = in.next();
+                    medicalHistory.setAllergies(medicalHistory.getAllergies() + "\n" + allergies);
+                    break;
+                case "r":
+                    System.out.println("The current allergies list will be deleted. Enter the allergies to replace it: ");
+                    allergies = in.next();
+                    medicalHistory.setAllergies(allergies);
+                case "":
+                    break loop;
+                default:
+                    System.out.println("Command was not recognized.");
+
+            }
+        }
+
+        System.out.println("Current medications: " + medicalHistory.getMedications());
+        loop:
+        while(true) {
+            System.out.println("To add to this list, enter 'a'.\n" +
+                    "To delete and replace the list, enter 'r'.\n" +
+                    "If there are no changes, hit enter.");
+            medications = in.nextLine();
+
+            switch (medications) {
+                case "a":
+                    System.out.println("Enter the medications to add to the list: ");
+                    medications = in.next();
+                    medicalHistory.setAllergies(medicalHistory.getAllergies() + "\n" + medications);
+                    break;
+                case "r":
+                    System.out.println("The current medications list will be deleted. " +
+                            "Enter the medication(s) to replace it: ");
+                    medications = in.next();
+                    medicalHistory.setAllergies(medications);
+                case "":
+                    break loop;
+                default:
+                    System.out.println("Command was not recognized.");
+
+            }
+        }
+
+        //hospital.updateMedicalHistory(patient);
     }
 
     private void printPatientHistoryHelp(){
@@ -206,7 +290,7 @@ public abstract class CommandLineUser extends CommandLine{
 
         System.out.println();
         System.out.println("Create an Appointment");
-        System.out.println("Is this appointment with the patient's primary care doctor? (y or n)");
+        System.out.println("Is this appointment with the patient's primary care doctor? (y/n)");
         String question = in.nextLine();
 
         if(question.equals("y")) doctor = patient.getDoctor();
@@ -239,8 +323,26 @@ public abstract class CommandLineUser extends CommandLine{
         System.out.println("Enter the reason for the appointment:");
         reasonForVisit = in.nextLine();
         // TODO add dateTime
-        hospital.addAppointment(doctor, patientId, null, reasonForVisit);
+        LocalDateTime dateTime = getDateTime(in);
+        hospital.addAppointment(doctor, patientId, dateTime, reasonForVisit);
     }
 
+    private LocalDateTime getDateTime(Scanner in){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm a");
+        LocalDateTime dateTime;
+
+        System.out.println("Enter the date and time of the appointment in the format \"yyyy-mm-dd hh:mm AM/PM");
+        while(true) {
+            String date = in.nextLine();
+
+            try {
+                dateTime = LocalDateTime.parse(date, formatter);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("The date was not entered in the correct format. Try again:");
+            }
+        }
+        return dateTime;
+    }
 
 }

@@ -75,7 +75,6 @@ public class CommandLineSupport extends CommandLineUser {
         address = addressValidation(in);
         doctor = doctorValidation(in);
 
-        //TODO add the rest of this info
         return hospital.addPatient(firstName, lastName, middleInitial, email, address,
                 gender, insurance, phone, doctor);
     }
