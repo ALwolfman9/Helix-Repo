@@ -64,7 +64,7 @@ public class DBController {
 
 			createString = "CREATE TABLE IF NOT EXISTS prescription("
 					+ "patient_ID bigint NOT NULL,"
-					+ "prescription_ID VARCHAR(20) NOT NULL,"
+					+ "prescription_ID bigint auto_increment,"
 					+ "drug_name VARCHAR(30) NOT NULL,"
 					+ "dosage VARCHAR(30) NOT NULL,"
 					+ "duration VARCHAR(20) NOT NULL,"

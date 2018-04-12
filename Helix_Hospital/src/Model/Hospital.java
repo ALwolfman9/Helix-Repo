@@ -169,17 +169,16 @@ public class Hospital {
     	return true;
     }
     
-    public boolean addPrescription(String patientID, String prescriptionID, String drugName, String dosage, String duration) {
+    public boolean addPrescription(String patientID, String drugName, String dosage, String duration) {
     	String sql = "insert into prescription(patient_ID, prescription_ID, drup_name, dosage, duration) "
-    			+ "+ VALUES(?,?,?,?,?)";
+    			+ "+ VALUES(?,?,?,?)";
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(sql);
     		preparedStmt.setString(1, patientID);
-    		preparedStmt.setString(2, prescriptionID);
-    		preparedStmt.setString(3, drugName);
-    		preparedStmt.setString(4, dosage);
-    		preparedStmt.setString(5, duration);
+    		preparedStmt.setString(2, drugName);
+    		preparedStmt.setString(3, dosage);
+    		preparedStmt.setString(4, duration);
     		preparedStmt.execute();
     	} catch (SQLException e) {
     		e.printStackTrace();

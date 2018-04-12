@@ -265,11 +265,8 @@ public class CommandLineDoctor extends CommandLineUser {
         System.out.println("Enter the duration:");
         duration = in.nextLine();
 
-        System.out.println("Enter the prescriptionID:");
-        id = in.nextLine();
-
         //TODO Is prescriptionID auto generated, like patientID?
-        hospital.addPrescription(patient.getPatientID(), id, drug, dosage, duration);
+        hospital.addPrescription(patient.getPatientID(), drug, dosage, duration);
 
     }
 
