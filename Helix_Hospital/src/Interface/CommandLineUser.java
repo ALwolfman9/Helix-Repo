@@ -158,10 +158,15 @@ public abstract class CommandLineUser extends CommandLine{
     void viewPatientAppointments(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        Iterator<Appointment> appointments = hospital.getAppointmentsOfPatient(patient.getPatientID());
+        List<Appointment> appointments = hospital.getAppointmentsOfPatient(patient.getPatientID());
 
         if(appointments == null) System.out.println("There are no appointments.");
-        else //TODO Print out the appointments
+        else {
+            for(Appointment appointment : appointments){
+                //TODO create appointment toString for it to print correctly
+                System.out.println(appointment);
+            }
+        }
 
         System.out.println("\n=================================");
         System.out.println(String.format(""));
@@ -201,9 +206,15 @@ public abstract class CommandLineUser extends CommandLine{
         System.out.println("Create an Appointment");
         System.out.println("Is this appointment with the patient's primary care doctor? (y or n)");
         String question = in.nextLine();
+
         if(question.equals("y")) doctor = patient.getDoctor();
         else {
             while (true) {
+                if (!hospital.doctorExists()) {
+                    System.out.println("Appointment cannot be created; there are no doctors in the system");
+                    System.out.println("Quitting appointment creation");
+                    return;
+                }
                 System.out.println("Enter the username of the doctor this appointment is with: ");
                 System.out.println("(Enter $list to list each doctor and their usernames | " +
                         "Enter $quit to cancel appointment)");

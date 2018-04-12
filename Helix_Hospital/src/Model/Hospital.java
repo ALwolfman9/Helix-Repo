@@ -378,7 +378,34 @@ public class Hospital {
         return null;
     }
 
-    public Iterator<Appointment> getAppointmentsOfPatient(String patientId){
+    public List<Appointment> getAppointmentsOfPatient(String patientId){
+        String sql = "SELECT username, patient_ID, date, reason_for_visit "
+                + "FROM appointment "
+                + "WHERE patient_ID = '" + patientId + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+            if (!set.next()) {
+                return null;
+            }
+
+            List<Appointment> appointments = new ArrayList<>();
+
+            while(set.next()){
+                Appointment appointment = new Appointment();
+                appointment.setUsername( set.getString("username") );
+                appointment.setPatientID( set.getString("patient_ID") );
+                appointment.setDateTime( set.getString("date") );
+                appointment.setReasonForVisit( set.getString("reason_for_visit") );
+
+                appointments.add(appointment);
+            }
+            return appointments;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //appointments not found
         return null;
     }
 
