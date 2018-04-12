@@ -162,9 +162,10 @@ public abstract class CommandLineUser extends CommandLine{
 
         if(appointments == null) System.out.println("There are no appointments.");
         else {
+            System.out.println("Viewing appointments for: " + patient.getFirstName() + " " + patient.getLastName());
+            System.out.println("\n=================================");
             for(Appointment appointment : appointments){
-                //TODO create appointment toString for it to print correctly
-                System.out.println(appointment);
+                System.out.println(appointment.patientView(false));
             }
         }
 

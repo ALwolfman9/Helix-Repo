@@ -66,4 +66,14 @@ public class Prescription {
         this.duration = duration;
     }
     // endregion
+
+
+    @Override
+    public String toString() {
+        String view = "Prescription ID: " + prescriptionID
+                + "\nDrug Name: " + drugName
+                + "\nDosage: " + dosage
+                + "\nDuration: " + duration;
+        return view;
+    }
 }

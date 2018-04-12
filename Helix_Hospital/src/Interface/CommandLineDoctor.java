@@ -161,8 +161,10 @@ public class CommandLineDoctor extends CommandLineUser {
 
         if(records == null) System.out.println("There are no records.");
         else {
+            System.out.println("Viewing medical records for: " + patient.getFirstName() + " " + patient.getLastName());
+            System.out.println("\n=================================");
             for(MedicalRecord record : records){
-                //TODO create MedicalRecord toString for it to print correctly
+                System.out.println("\n---------------------------------");
                 System.out.println(record);
             }
         }
@@ -221,8 +223,10 @@ public class CommandLineDoctor extends CommandLineUser {
 
         if(prescriptions == null) System.out.println("There are no prescriptions.");
         else {
+            System.out.println("Viewing prescriptions for: " + patient.getFirstName() + " " + patient.getLastName());
+            System.out.println("\n=================================");
             for(Prescription prescription : prescriptions){
-                //TODO create Prescription toString for it to print correctly
+                System.out.println("\n---------------------------------");
                 System.out.println(prescription);
             }
         }
