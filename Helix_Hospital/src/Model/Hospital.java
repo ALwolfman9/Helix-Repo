@@ -16,54 +16,24 @@ public class Hospital {
         this.conn = conn;
     }
 
-//    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo,
-//                              String email, Employee.Gender gender, String insurance_ID,
-//                              String phoneNo, String status){
-//
-//        Random random = new Random();
-//        String patient_ID = Integer.toString(random.nextInt());
-//
-//        String sql = "INSERT INTO patient " +
-//                "VALUES (" + formatString(patient_ID) + ", " +
-//                formatString(roomNo) + ", " +
-//                formatString(firstName) + ", " +
-//                formatString(middleInit) + ", " +
-//                formatString(lastName) + ", " +
-//                formatString(email) + ", " +
-//                formatString(formatGender(gender)) + ", " +
-//                formatString(insurance_ID) + ", " +
-//                formatString(phoneNo) + ", " +
-//                formatString(status) + ");";
-//        try {
-//            Statement st = conn.createStatement();
-//            st.execute(sql);
-//            return true;
-//        }
-//        catch (SQLException e){
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
-    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo, String email,
-                              Patient.Gender gender, String insurance_ID, String phoneNo, String status, String doctor) {
-    	String insertStatement = "insert into patient(room_number, first_name, middle_initial, " +
-                "last_name, email, sex, insurance_id, phone, status, doctor) "
-    			+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+    public boolean addPatient(String firstName, String lastName, String middleInit, String email, String address,
+                              Patient.Gender gender, String insurance_ID, String phoneNo, String doctor) {
+    	String insertStatement = "insert into patient(first_name, middle_initial, " +
+                "last_name, email, address, sex, insurance_id, phone, doctor) "
+    			+ "VALUES(?,?,?,?,?,?,?,?,?)";
     	PreparedStatement preparedStmt;
 
     	try {
     		preparedStmt = conn.prepareStatement(insertStatement);
-    		preparedStmt.setString (1, roomNo);
-    		preparedStmt.setString (2, firstName);
-    		preparedStmt.setString (3, middleInit);
-    		preparedStmt.setString (4, lastName);
-    		preparedStmt.setString (5, email);
+    		preparedStmt.setString (1, firstName);
+    		preparedStmt.setString (2, middleInit);
+    		preparedStmt.setString (3, lastName);
+    		preparedStmt.setString (4, email);
+    		preparedStmt.setString (5, address);
     		preparedStmt.setString (6, gender == null ? null : gender.name());
     		preparedStmt.setString (7, insurance_ID);
     		preparedStmt.setString (8, phoneNo);
-    		preparedStmt.setString (9, status);
-    		preparedStmt.setString(10, doctor);
+    		preparedStmt.setString(9, doctor);
 
     		// execute the preparedstatement
     		preparedStmt.execute();

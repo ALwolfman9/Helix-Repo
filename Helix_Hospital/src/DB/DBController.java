@@ -36,15 +36,14 @@ public class DBController {
 
 			createString = "CREATE TABLE IF NOT EXISTS patient ("
 					+ "patient_ID bigint auto_increment,"
-					+ "room_number CHAR(5),"
 					+ "first_name VARCHAR(20) NOT NULL,"
 					+ "middle_initial VARCHAR(1),"
-					+ "last_name VARCHAR(20) NOT NULL,"
+					+ "last_name VARCHAR(30) NOT NULL,"
 					+ "email VARCHAR(50),"
+					+ "address varchar(255), "
 					+ "sex ENUM('M', 'F', 'O'),"
 					+ "insurance_ID CHAR(15),"
 					+ "phone CHAR(10),"
-					+ "status VARCHAR(20)," //enum?
 					+ "doctor VARCHAR(30), "
 					+ "FOREIGN KEY (doctor) REFERENCES DOCTOR(username)"
 					+ ");";

@@ -13,16 +13,14 @@ public class Patient {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private String address;
     private Gender gender;
-    private String roomNumber;
-    private String status;
     private String doctor;
     //endregion
 
     //region constructors
     Patient(String patientID, String insuranceID, String firstName, String middleInit, String lastName,
-            String phoneNumber, String email, String address, Gender gender, String roomNumber,
-            String status, String doctor){
+            String phoneNumber, String email, String address, Gender gender, String doctor){
         this.patientID = patientID;
         this.insuranceID = insuranceID;
         this.firstName = firstName;
@@ -30,9 +28,8 @@ public class Patient {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.address = address;
         this.gender = gender;
-        this.roomNumber = roomNumber;
-        this.status = status;
         this.doctor = doctor;
     }
 
@@ -44,9 +41,8 @@ public class Patient {
         this.lastName = null;
         this.phoneNumber = null;
         this.email = null;
+        this.address = null;
         this.gender = null;
-        this.roomNumber = null;
-        this.status = null;
         this.doctor = null;
     }
     //endregion
@@ -116,28 +112,20 @@ public class Patient {
         this.email = email;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Gender getGender() {
         return gender;
     }
 
     public void setGender(Gender gender) {
         this.gender = gender;
-    }
-
-    public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getDoctor(){

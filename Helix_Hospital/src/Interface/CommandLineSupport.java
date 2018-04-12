@@ -65,6 +65,15 @@ public class CommandLineSupport extends CommandLineUser {
 
         System.out.println();
         System.out.println("Create an Patient");
+        /*firstName = firstNameValidation(in);
+        //middleInitial = middleInitialValidation(in);
+        lastName = lastNameValidation(in);
+        insurance = insuranceValidation(in);
+        phone = phoneValidation(in);
+        gender = genderValidation(in);
+        ssn = ssnValidation(in);
+        email = emailValidation(in);
+        address = addressValidation(in);*/
         System.out.println("Enter first name: ");
         firstName = in.nextLine();
         System.out.println("Enter last name: ");
@@ -88,7 +97,7 @@ public class CommandLineSupport extends CommandLineUser {
 
         //TODO add the rest of this info
         return hospital.addPatient(firstName, lastName, null, null, null,
-                null, insuranceID, null, null, doctor);
+                null, insuranceID, null, doctor);
     }
     void viewPatient(Patient patient) {
         Scanner in = new Scanner(System.in);
