@@ -78,7 +78,7 @@ public class CommandLineAdmin extends CommandLine {
 
     private String firstNameValidation(Scanner in){
         while (true) {
-            System.out.println("Enter first name: ");
+            System.out.println("*Enter first name: ");
             String firstName = in.nextLine();
             if (firstName.length() > 0 && firstName.length() <= 20) {
                 return firstName;
@@ -107,7 +107,7 @@ public class CommandLineAdmin extends CommandLine {
 
     private String lastNameValidation(Scanner in){
         while (true) {
-            System.out.println("Enter last name: ");
+            System.out.println("*Enter last name: ");
             String lastName = in.nextLine();
             if (lastName.length() > 0 && lastName.length() <= 30) {
                 return lastName;
@@ -120,10 +120,10 @@ public class CommandLineAdmin extends CommandLine {
 
     private String usernameValidation(Scanner in){
         while (true) {
-            System.out.println("Enter username: ");
+            System.out.println("*Enter username: ");
             String username = in.nextLine();
-            if (username.equals("admin")) {
-                System.out.println("Username 'admin' is unavailable");
+            if (username.equals("admin") || hospital.getEmployee(username) != null) {
+                System.out.println("Username '" + username + "' is unavailable");
             }
             else if (username.length() > 0 && username.length() <= 30 && username.matches("[A-Za-z0-9]+")) {
                 return username;
@@ -152,7 +152,7 @@ public class CommandLineAdmin extends CommandLine {
 
     private Employee.Gender genderValidation(Scanner in){
         while(true) {
-            System.out.println("Enter the employee gender (m for male, f for female, o for other): ");
+            System.out.println("*Enter the employee gender (m for male, f for female, o for other): ");
             String gender = in.nextLine();
             switch (gender) {
                 case "m":
@@ -169,9 +169,12 @@ public class CommandLineAdmin extends CommandLine {
 
     private String ssnValidation(Scanner in){
         while (true) {
-            System.out.println("Enter the SSN (no dashes): ");
+            System.out.println("*Enter the SSN (no dashes): ");
             String ssn = in.nextLine();
-            if (ssn.length() == 9 && ssn.matches("[0-9]+")) {
+            if (hospital.getEmployeeBySSN(ssn) != null) {
+                System.out.println("An employee with that SSN already exists");
+            }
+            else if (ssn.length() == 9 && ssn.matches("[0-9]+")) {
                 return ssn;
             }
             else {
@@ -216,7 +219,7 @@ public class CommandLineAdmin extends CommandLine {
 
     private Employee.Type typeValidation(Scanner in){
         while(true) {
-            System.out.println("Enter the employee type (d for doctor, n for nurse, s for support): ");
+            System.out.println("*Enter the employee type (d for doctor, n for nurse, s for support): ");
             String t = in.nextLine();
             switch (t) {
                 case "d":

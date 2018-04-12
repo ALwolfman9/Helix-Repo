@@ -28,7 +28,12 @@ public class CommandLineSupport extends CommandLineUser {
                 case "n":
                 case "N":
                 case "new":
-                    if(!createPatient()) System.out.println("Patient could not be created");
+                    if (hospital.doctorExists()) {
+                        if (!createPatient()) System.out.println("Patient could not be created");
+                    }
+                    else {
+                        System.out.println("Patient cannot be created; there are no doctors in the system");
+                    }
                     break;
                 case "p":
                 case "P":

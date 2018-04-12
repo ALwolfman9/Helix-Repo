@@ -99,6 +99,28 @@ public class Hospital {
         return null;
     }
 
+    public Employee getEmployeeBySSN(String ssn){
+        String sql = "SELECT first_name, last_name, username, type FROM employee WHERE ssn = '" + ssn + "';";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet result = st.executeQuery(sql);
+            if (!result.next()){
+                return null;
+            }
+            Employee emp = new Employee();
+            emp.setFirstName(result.getString("first_name"));
+            emp.setLastName(result.getString("last_name"));
+            emp.setUsername(result.getString("username"));
+            emp.setType(Employee.Type.fromString(result.getString("type")));
+            return emp;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //do something with the sql
+        return null;
+    }
+
     public boolean addDoctor(String username, String firstName, String middleInit, String lastName,
                              String phoneNo, Employee.Gender gender, String ssn, String email, String address,
                              Employee.Type type, String special){
@@ -263,6 +285,19 @@ public class Hospital {
         try {
             PreparedStatement preparedStmt = conn.prepareStatement(sql);
             preparedStmt.setString (1, username);
+            ResultSet set = preparedStmt.executeQuery();
+            return (set.next()) ? true : false;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean doctorExists(){
+        String sql = "SELECT username FROM Doctor";
+        try {
+            PreparedStatement preparedStmt = conn.prepareStatement(sql);
             ResultSet set = preparedStmt.executeQuery();
             return (set.next()) ? true : false;
         }
