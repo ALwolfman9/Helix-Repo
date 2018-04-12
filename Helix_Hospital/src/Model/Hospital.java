@@ -18,6 +18,7 @@ public class Hospital {
 
     public boolean addPatient(String firstName, String lastName, String middleInit, String email, String address,
                               Patient.Gender gender, String insurance_ID, String phoneNo, String doctor) {
+    	boolean committed = false;
     	String insertStatement = "insert into patient(first_name, middle_initial, " +
                 "last_name, email, address, sex, insurance_id, phone, doctor) "
     			+ "VALUES(?,?,?,?,?,?,?,?,?)";
@@ -37,12 +38,20 @@ public class Hospital {
 
     		// execute the preparedstatement
     		preparedStmt.execute();
+    		committed = true;
     	} catch (SQLException e) {
     		e.printStackTrace();
-    		return false;
-
     	}
-
+    	finally {
+    		if(!committed) {
+    			try {
+    				conn.rollback();
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    			}
+    			return false;
+    		}
+    	} 
     	return true;
     }
 
@@ -114,6 +123,7 @@ public class Hospital {
     
     public boolean addEmployee(String username, String firstName, String middleInit, String lastName,
             String phoneNo, Employee.Gender gender, String ssn, String email, String address, Employee.Type type) {
+    	boolean committed = false;
     	String insertStatement = "insert into employee(username, first_name, middle_initial, last_name, phone, sex, ssn, email, address, type) "
     			+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
     	PreparedStatement preparedStmt;
@@ -128,20 +138,28 @@ public class Hospital {
     		preparedStmt.setString (7, ssn);
     		preparedStmt.setString (8, email);
     		preparedStmt.setString (9, address);
-    		preparedStmt.setString (10, type.toString());
-
-    		// execute the preparedstatement
+    		preparedStmt.setString (10, type.name());
     		preparedStmt.execute();
+    		committed = true;
     	} catch (SQLException e) {
     		e.printStackTrace();
-    		return false;
-
     	}
+    	finally {
+    		if(!committed) {
+    			try {
+    				conn.rollback();
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    			}
+    			return false;
+    		}
+    	} 
 
     	return true;
     }
     
     public boolean addAppointment(String username, String patientID, LocalDateTime dateTime, String reasonForVisit) {
+    	boolean committed = false;
     	String sql = "insert into appointment(username, patient_id, date, reason_for_visit) "
     			+ "+ VALUES(?,?,?,?)";
     	PreparedStatement preparedStmt;
@@ -153,17 +171,27 @@ public class Hospital {
     		preparedStmt.setTimestamp(3, ts);
     		preparedStmt.setString(4, reasonForVisit);
     		preparedStmt.execute();
+    		committed = true;
     	} catch (SQLException e) {
     		e.printStackTrace();
-    		return false;
-
     	}
+    	finally {
+    		if(!committed) {
+    			try {
+    				conn.rollback();
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    			}
+    			return false;
+    		}
+    	} 
     	return true;
     }
     
     public boolean addPrescription(String patientID, String drugName, String dosage, String duration) {
-    	String sql = "insert into prescription(patient_ID, prescription_ID, drup_name, dosage, duration) "
+    	String sql = "insert into prescription(patient_ID, prescription_ID, drug_name, dosage, duration) "
     			+ "+ VALUES(?,?,?,?)";
+    	boolean committed = false;
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(sql);
@@ -172,16 +200,26 @@ public class Hospital {
     		preparedStmt.setString(3, dosage);
     		preparedStmt.setString(4, duration);
     		preparedStmt.execute();
+    		committed = true;
     	} catch (SQLException e) {
     		e.printStackTrace();
-    		return false;
-
     	}
+    	finally {
+    		if(!committed) {
+    			try {
+    				conn.rollback();
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    			}
+    			return false;
+    		}
+    	} 
     	return true;
     }
     
     public boolean addMedicalHistory (String patientID, String bloodType, String allergies, 
     		String medications, String pastConditions, String familyHistory) {
+    	boolean committed = false;
     	String sql = "insert into medical_history(patient_ID, blood_type, family_history, past_Conditions, allergies, medications) "
     			+ "+ VALUES(?,?,?,?,?,?)";
     	PreparedStatement preparedStmt;
@@ -194,16 +232,25 @@ public class Hospital {
     		preparedStmt.setString(5, allergies);
     		preparedStmt.setString(6, medications);
     		preparedStmt.execute();
+    		committed = true;
     	} catch (SQLException e) {
     		e.printStackTrace();
-    		return false;
-
     	}
-    	
+    	finally {
+    		if(!committed) {
+    			try {
+    				conn.rollback();
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    			}
+    			return false;
+    		}
+    	} 
     	return true;
     }
 
     public boolean addMedicalRecord (String username, String patientID, LocalDateTime dateTime, String notes) {
+    	boolean committed = false;
     	String sql = "insert into medical_record(username, patient_id, date, notes) "
     			+ "+ VALUES(?,?,?,?)";
     	PreparedStatement preparedStmt;
@@ -215,11 +262,21 @@ public class Hospital {
     		preparedStmt.setTimestamp(3, ts);
     		preparedStmt.setString(4, notes);
     		preparedStmt.execute();
+    		committed = true;
     	} catch (SQLException e) {
     		e.printStackTrace();
-    		return false;
 
     	}
+    	finally {
+    		if(!committed) {
+    			try {
+    				conn.rollback();
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    			}
+    			return false;
+    		}
+    	} 
     	return true;
     }
 
@@ -494,6 +551,188 @@ public class Hospital {
         else return "'" + s + "'";
 
     }
+    
+    public boolean updatePatient(Patient patient) {
+    	boolean committed = false;
+    	String sql = 
+    			   "UPDATE patient " + 
+    			   "  SET (first_name = ?, middle_initial = ?,last_name = ?, email = ?, address = ?, sex = ?, insurance_id = ?, phone = ?, doctor = ?)" +
+    			   "WHERE patient_ID = ?";
+    			PreparedStatement pstmt;
+				try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, patient.getFirstName());
+					pstmt.setString(2, patient.getMiddleInit());
+					pstmt.setString(3, patient.getLastName());
+					pstmt.setString(4, patient.getEmail());
+					pstmt.setString(5, patient.getAddress());
+					pstmt.setString(6, patient.getGender() == null ? null : patient.getGender().name());
+					pstmt.setString(7, patient.getInsuranceID());
+					pstmt.setString(8, patient.getPhoneNumber());
+					pstmt.setString(9, patient.getDoctor());
+	    			pstmt.setString(10, patient.getPatientID());
+	    			pstmt.executeUpdate();
+	    			committed = true;	
+				}
+				catch (SQLException e){
+					e.printStackTrace();
+					return false;
+				} 
+	    		finally {
+					if(!committed) {
+						try {
+							conn.rollback();
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return false;
+						}
+					}
+				} 
+    	return true;
+    }
+    
+    public boolean updateEmployee(Employee employee) {
+    	boolean committed = false;
+    	String sql = 
+    			   "UPDATE employee " + 
+    			   "  SET (first_name = ?, middle_initial = ?, last_name = ?, phone = ?, sex = ?, ssn = ?, email = ?, address = ?, type = ?)" +
+    			   "WHERE username = ?";
+    			PreparedStatement pstmt;
+				try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, employee.getFirstName());
+					pstmt.setString(2, "" + employee.getMiddleInit());
+					pstmt.setString(3, employee.getLastName());
+					pstmt.setString(4, employee.getPhoneNumber());
+					pstmt.setString(5, employee.getGender() == null ? null : employee.getGender().name());
+					pstmt.setString(6, employee.getSsn());
+					pstmt.setString(7, employee.getEmail());
+					pstmt.setString(8, employee.getAddress());
+	    			pstmt.setString(9, employee.getType().name());
+	    			pstmt.setString(10, employee.getUsername());
+	    			pstmt.executeUpdate();
+	    			committed = true;	
+				}
+				catch (SQLException e){
+					e.printStackTrace();
+					return false;
+				} 
+	    		finally {
+					if(!committed) {
+						try {
+							conn.rollback();
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return false;
+						}
+					}
+				} 
+    	return true;
+    }
+    
+    public boolean updateAppointment(Appointment appointment, LocalDateTime date) {
+    	boolean committed = false;
+    	String sql = 
+    			   "UPDATE appointment " + 
+    			   "  SET (date = ?, reason_for_visit = ?)" +
+    			   "WHERE username = ?, patient_ID = ?, date = ?";
+    			PreparedStatement pstmt;
+				try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, date.toString());
+					pstmt.setString(2, appointment.getReasonForVisit());
+					pstmt.setString(3, appointment.getUsername());
+					pstmt.setString(4, appointment.getPatientID());
+					pstmt.setString(5, appointment.getDateTime().toString());
+	    			pstmt.executeUpdate();
+	    			committed = true;	
+				}
+				catch (SQLException e){
+					e.printStackTrace();
+					return false;
+				} 
+	    		finally {
+					if(!committed) {
+						try {
+							conn.rollback();
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return false;
+						}
+					}
+				} 
+    	return true;
+    }
+    
+    public boolean updatePrescription(Prescription prescription) {
+    	boolean committed = false;
+    	String sql = 
+    			   "UPDATE prescripton " + 
+    			   "  SET (prescription_id = ?, drug_name = ?, dosage = ?, duration = ?)" +
+    			   "WHERE patient_ID = ?";
+    			PreparedStatement pstmt;
+				try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, prescription.getPrescriptionID());
+					pstmt.setString(2, prescription.getDrugName());
+					pstmt.setString(3, prescription.getDosage());
+					pstmt.setString(4, prescription.getDuration());
+					pstmt.setString(5, prescription.getPatientID());
+	    			pstmt.executeUpdate();
+	    			committed = true;	
+				}
+				catch (SQLException e){
+					e.printStackTrace();
+					return false;
+				} 
+	    		finally {
+					if(!committed) {
+						try {
+							conn.rollback();
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return false;
+						}
+					}
+				} 
+    	return true;
+    }
+    
+    public boolean updateMedicalHistory(MedicalHistory mh) {
+    	boolean committed = false;
+    	String sql = 
+    			   "UPDATE medical_history " + 
+    			   "  SET (blood_type = ?, family_history = ?, past_conditions = ?, allergies = ?, medications = ?)" +
+    			   "WHERE patient_ID = ?";
+    			PreparedStatement pstmt;
+				try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, mh.getBloodType());
+					pstmt.setString(2, mh.getFamilyHistory());
+					pstmt.setString(3, mh.getPastConditions());
+					pstmt.setString(4, mh.getAllergies());
+					pstmt.setString(5, mh.getMedications());
+					pstmt.setString(5, mh.getPatientID());
+	    			pstmt.executeUpdate();
+	    			committed = true;	
+				}
+				catch (SQLException e){
+					e.printStackTrace();
+					return false;
+				} 
+	    		finally {
+					if(!committed) {
+						try {
+							conn.rollback();
+						} catch (SQLException e) {
+							e.printStackTrace();
+							return false;
+						}
+					}
+				} 
+    	return true;
+    }
+    
 
     private String formatGender(Employee.Gender g){
         if(g == null) return null;
@@ -523,5 +762,7 @@ public class Hospital {
                 return "H";
         }
     }
+    
+    
 
 }
