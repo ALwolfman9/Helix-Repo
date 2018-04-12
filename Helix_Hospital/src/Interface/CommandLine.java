@@ -1,7 +1,7 @@
 package Interface;
 
-import Model.Employee;
 import Model.Hospital;
+import Model.Person;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -73,17 +73,17 @@ public abstract class CommandLine {
         }
     }
 
-    public Employee.Gender genderValidation(Scanner in){
+    public Person.Gender genderValidation(Scanner in){
         while(true) {
-            System.out.println("*Enter the employee gender (m for male, f for female, o for other): ");
+            System.out.println("*Enter the gender (m for male, f for female, o for other): ");
             String gender = in.nextLine();
             switch (gender) {
                 case "m":
-                    return Employee.Gender.M;
+                    return Person.Gender.M;
                 case "f":
-                    return Employee.Gender.F;
+                    return Person.Gender.F;
                 case "o":
-                    return Employee.Gender.O;
+                    return Person.Gender.O;
                 default:
                     System.out.println("Please enter a valid gender");
             }

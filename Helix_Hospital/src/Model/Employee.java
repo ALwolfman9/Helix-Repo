@@ -1,6 +1,6 @@
 package Model;
 
-public class Employee {
+public class Employee extends Person{
     //region fields
     private String username;
     private String firstName;
@@ -66,12 +66,6 @@ public class Employee {
             else return Type.ERROR;
 
         }
-    }
-
-    public enum Gender{
-        M,
-        F,
-        O;
     }
     //endregion
 

@@ -61,43 +61,23 @@ public class CommandLineSupport extends CommandLineUser {
     private boolean createPatient(){
         Scanner in = new Scanner(System.in);
 
-        String firstName, lastName, insuranceID, doctor;
-
+        String firstName, middleInitial, lastName, insurance, phone, email, address, doctor;
+        Patient.Gender gender;
         System.out.println();
-        System.out.println("Create an Patient");
-        /*firstName = firstNameValidation(in);
-        //middleInitial = middleInitialValidation(in);
+        System.out.println("Create a Patient");
+        firstName = firstNameValidation(in);
+        middleInitial = middleInitialValidation(in);
         lastName = lastNameValidation(in);
         insurance = insuranceValidation(in);
         phone = phoneValidation(in);
         gender = genderValidation(in);
-        ssn = ssnValidation(in);
         email = emailValidation(in);
-        address = addressValidation(in);*/
-        System.out.println("Enter first name: ");
-        firstName = in.nextLine();
-        System.out.println("Enter last name: ");
-        lastName = in.nextLine();
-        System.out.println("Enter insurance ID: ");
-        insuranceID = in.nextLine();
-        while(true) {
-            System.out.println("Enter the patient's doctor's username: ");
-            System.out.println("(Enter $list to list each doctor and their usernames)");
-            doctor = in.nextLine();
-            if(doctor.equals("$list")) {
-                viewDoctors();
-            }
-            else if (!hospital.doctorExists(doctor)) {
-                System.out.println("A doctor with the given username does not exist");
-            }
-            else{
-                break;
-            }
-        }
+        address = addressValidation(in);
+        doctor = doctorValidation(in);
 
         //TODO add the rest of this info
-        return hospital.addPatient(firstName, lastName, null, null, null,
-                null, insuranceID, null, doctor);
+        return hospital.addPatient(firstName, lastName, middleInitial, email, address,
+                gender, insurance, phone, doctor);
     }
     void viewPatient(Patient patient) {
         Scanner in = new Scanner(System.in);
@@ -130,6 +110,7 @@ public class CommandLineSupport extends CommandLineUser {
             }
         }
     }
+
     void printPatientViewHelp(Patient p){
         String name = p.getFirstName();
         System.out.println();
@@ -137,5 +118,35 @@ public class CommandLineSupport extends CommandLineUser {
         System.out.println(String.format("info/i/I\t\t\tView, %s's Patient Info", name));
         System.out.println(String.format("appointments/a/A\t\t\tView, edit, and add to %s's Appointments", name));
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
+    }
+
+    private String insuranceValidation(Scanner in){
+        while (true) {
+            System.out.println("Enter insurance ID: ");
+            String insurance = in.nextLine();
+            if (insurance.length() >= 10 && insurance.length() <= 15) {
+                return insurance;
+            }
+            else {
+                System.out.println("Insurance ID must be 10-15 characters");
+            }
+        }
+    }
+
+    private String doctorValidation(Scanner in){
+        while(true) {
+            System.out.println("Enter the patient's doctor's username: ");
+            System.out.println("(Enter $list to list each doctor and their usernames)");
+            String doctor = in.nextLine();
+            if(doctor.equals("$list")) {
+                viewDoctors();
+            }
+            else if (hospital.doctorExists(doctor)) {
+                return doctor;
+            }
+            else{
+                System.out.println("A doctor with the given username does not exist");
+            }
+        }
     }
 }

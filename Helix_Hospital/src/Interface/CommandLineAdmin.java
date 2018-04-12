@@ -1,7 +1,7 @@
 package Interface;
 
 import Model.*;
-import Model.Employee.Gender;
+import static Model.Employee.Gender;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;

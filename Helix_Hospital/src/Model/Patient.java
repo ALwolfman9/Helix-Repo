@@ -4,7 +4,7 @@ package Model;
 import java.io.File;
 import java.util.HashMap;
 
-public class Patient {
+public class Patient extends Person{
     //region fields
     private String patientID;
     private String insuranceID;
@@ -44,14 +44,6 @@ public class Patient {
         this.address = null;
         this.gender = null;
         this.doctor = null;
-    }
-    //endregion
-
-    //region enums
-    public enum Gender{
-        M,
-        F,
-        O;
     }
     //endregion
 
