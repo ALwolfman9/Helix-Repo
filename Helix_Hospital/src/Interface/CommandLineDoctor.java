@@ -57,7 +57,7 @@ public class CommandLineDoctor extends CommandLineUser {
     @Override
     void viewPatients() {
         List<Patient> patients = hospital.getPatientsOfDoctor(user);
-        if(patients == null) System.out.println("You have no patients.");
+        if(patients.size() < 1) System.out.println("You have no patients.");
         else {
             System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
             for (Patient p : patients) {

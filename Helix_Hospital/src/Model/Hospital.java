@@ -307,13 +307,13 @@ public class Hospital {
         }
     }
 
-    public Iterator<Patient> getAllPatients(){
+    public List<Patient> getAllPatients(){
         String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor FROM PATIENT";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
 
-            ArrayList<Patient> patients = new ArrayList<>();
+            List<Patient> patients = new ArrayList<>();
 
             while(set.next()){
                 Patient patient = new Patient();
@@ -324,7 +324,7 @@ public class Hospital {
                 patient.setDoctor( set.getString("doctor") );
                 patients.add(patient);
             }
-            return patients.iterator();
+            return patients;
 
         }
         catch (SQLException e){
@@ -333,7 +333,7 @@ public class Hospital {
         return null;
     }
 
-    public Iterator<Patient> getPatientsOfDoctor(Employee doctor){
+    public List<Patient> getPatientsOfDoctor(Employee doctor){
         String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor "
                 + "FROM Patient "
                 + "WHERE doctor = '" + doctor.getUsername() + "'";
@@ -341,7 +341,7 @@ public class Hospital {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
 
-            ArrayList<Patient> patients = new ArrayList<>();
+            List<Patient> patients = new ArrayList<>();
 
             while(set.next()){
                 Patient patient = new Patient();
@@ -352,7 +352,7 @@ public class Hospital {
                 patient.setDoctor( set.getString("doctor") );
                 patients.add(patient);
             }
-            return patients.iterator();
+            return patients;
         }
         catch (SQLException e){
             e.printStackTrace();

@@ -29,16 +29,12 @@ public abstract class CommandLineUser extends CommandLine{
     }
 
     void viewPatients() {
-        Iterator<Patient> patients = hospital.getAllPatients();
-        //TODO for all of these where it says ____ == null, it's wrong, because it's not null, the iterator is just empty
-        if(patients == null) System.out.println("There are no patients.");
+        List<Patient> patients = hospital.getAllPatients();
+        if(patients.size() < 1) System.out.println("There are no patients.");
         else {
-            List<Patient> patientList = new ArrayList<>();
             System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            while (patients.hasNext()) {
-                Patient p = patients.next();
+            for (Patient p : patients) {
                 System.out.println(p.toString());
-                patientList.add(p);
             }
             while (true) {
                 System.out.println("Enter a patient ID to view their profile, or enter 'q' to go back to home");
@@ -54,7 +50,7 @@ public abstract class CommandLineUser extends CommandLine{
                         break;
                 }
                 Patient selectedPatient = null;
-                for (Patient p : patientList) {
+                for (Patient p : patients) {
                     if (p.getPatientID().equals(cmdArgs[0])) {
                         selectedPatient = p;
                     }
