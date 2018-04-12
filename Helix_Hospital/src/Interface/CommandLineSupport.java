@@ -122,7 +122,7 @@ public class CommandLineSupport extends CommandLineUser {
 
     private String insuranceValidation(Scanner in){
         while (true) {
-            System.out.println("Enter insurance ID: ");
+            System.out.println("*Enter insurance ID: ");
             String insurance = in.nextLine();
             if (insurance.length() >= 10 && insurance.length() <= 15) {
                 return insurance;
@@ -135,7 +135,7 @@ public class CommandLineSupport extends CommandLineUser {
 
     private String doctorValidation(Scanner in){
         while(true) {
-            System.out.println("Enter the patient's doctor's username: ");
+            System.out.println("*Enter the patient's doctor's username: ");
             System.out.println("(Enter $list to list each doctor and their usernames)");
             String doctor = in.nextLine();
             if(doctor.equals("$list")) {
