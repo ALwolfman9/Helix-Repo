@@ -65,6 +65,7 @@ public class CommandLineNurse extends CommandLineUser {
                 case "I":
                 case "info":
                     viewPatientInfo(patient);
+                    break;
                 case "h":
                 case "H":
                 case "history":

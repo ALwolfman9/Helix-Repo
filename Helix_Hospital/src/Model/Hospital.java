@@ -16,54 +16,24 @@ public class Hospital {
         this.conn = conn;
     }
 
-//    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo,
-//                              String email, Employee.Gender gender, String insurance_ID,
-//                              String phoneNo, String status){
-//
-//        Random random = new Random();
-//        String patient_ID = Integer.toString(random.nextInt());
-//
-//        String sql = "INSERT INTO patient " +
-//                "VALUES (" + formatString(patient_ID) + ", " +
-//                formatString(roomNo) + ", " +
-//                formatString(firstName) + ", " +
-//                formatString(middleInit) + ", " +
-//                formatString(lastName) + ", " +
-//                formatString(email) + ", " +
-//                formatString(formatGender(gender)) + ", " +
-//                formatString(insurance_ID) + ", " +
-//                formatString(phoneNo) + ", " +
-//                formatString(status) + ");";
-//        try {
-//            Statement st = conn.createStatement();
-//            st.execute(sql);
-//            return true;
-//        }
-//        catch (SQLException e){
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
-    public boolean addPatient(String firstName, String lastName, String middleInit, String roomNo, String email,
-                              Patient.Gender gender, String insurance_ID, String phoneNo, String status, String doctor) {
-    	String insertStatement = "insert into patient(room_number, first_name, middle_initial, " +
-                "last_name, email, sex, insurance_id, phone, status, doctor) "
-    			+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+    public boolean addPatient(String firstName, String lastName, String middleInit, String email, String address,
+                              Patient.Gender gender, String insurance_ID, String phoneNo, String doctor) {
+    	String insertStatement = "insert into patient(first_name, middle_initial, " +
+                "last_name, email, address, sex, insurance_id, phone, doctor) "
+    			+ "VALUES(?,?,?,?,?,?,?,?,?)";
     	PreparedStatement preparedStmt;
 
     	try {
     		preparedStmt = conn.prepareStatement(insertStatement);
-    		preparedStmt.setString (1, roomNo);
-    		preparedStmt.setString (2, firstName);
-    		preparedStmt.setString (3, middleInit);
-    		preparedStmt.setString (4, lastName);
-    		preparedStmt.setString (5, email);
+    		preparedStmt.setString (1, firstName);
+    		preparedStmt.setString (2, middleInit);
+    		preparedStmt.setString (3, lastName);
+    		preparedStmt.setString (4, email);
+    		preparedStmt.setString (5, address);
     		preparedStmt.setString (6, gender == null ? null : gender.name());
     		preparedStmt.setString (7, insurance_ID);
     		preparedStmt.setString (8, phoneNo);
-    		preparedStmt.setString (9, status);
-    		preparedStmt.setString(10, doctor);
+    		preparedStmt.setString(9, doctor);
 
     		// execute the preparedstatement
     		preparedStmt.execute();
@@ -91,6 +61,28 @@ public class Hospital {
             emp.setType(Employee.Type.fromString(result.getString("type")));
             return emp;
 
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //do something with the sql
+        return null;
+    }
+
+    public Employee getEmployeeBySSN(String ssn){
+        String sql = "SELECT first_name, last_name, username, type FROM employee WHERE ssn = '" + ssn + "';";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet result = st.executeQuery(sql);
+            if (!result.next()){
+                return null;
+            }
+            Employee emp = new Employee();
+            emp.setFirstName(result.getString("first_name"));
+            emp.setLastName(result.getString("last_name"));
+            emp.setUsername(result.getString("username"));
+            emp.setType(Employee.Type.fromString(result.getString("type")));
+            return emp;
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -169,17 +161,16 @@ public class Hospital {
     	return true;
     }
     
-    public boolean addPrescription(String patientID, String prescriptionID, String drugName, String dosage, String duration) {
+    public boolean addPrescription(String patientID, String drugName, String dosage, String duration) {
     	String sql = "insert into prescription(patient_ID, prescription_ID, drup_name, dosage, duration) "
-    			+ "+ VALUES(?,?,?,?,?)";
+    			+ "+ VALUES(?,?,?,?)";
     	PreparedStatement preparedStmt;
     	try {
     		preparedStmt = conn.prepareStatement(sql);
     		preparedStmt.setString(1, patientID);
-    		preparedStmt.setString(2, prescriptionID);
-    		preparedStmt.setString(3, drugName);
-    		preparedStmt.setString(4, dosage);
-    		preparedStmt.setString(5, duration);
+    		preparedStmt.setString(2, drugName);
+    		preparedStmt.setString(3, dosage);
+    		preparedStmt.setString(4, duration);
     		preparedStmt.execute();
     	} catch (SQLException e) {
     		e.printStackTrace();
@@ -236,11 +227,10 @@ public class Hospital {
         String sql = "SELECT first_name, last_name, Doctor.username, type " +
                      "FROM Doctor, Employee " +
                      "WHERE Doctor.username = Employee.username";
+        ArrayList<Employee> doctors = new ArrayList<>();
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
-
-            ArrayList<Employee> doctors = new ArrayList<>();
 
             while(set.next()){
                 Employee doctor = new Employee();
@@ -250,13 +240,33 @@ public class Hospital {
                 doctor.setType(Employee.Type.fromString(set.getString("type")));
                 doctors.add(doctor);
             }
-            return doctors.iterator();
-
         }
         catch (SQLException e){
             e.printStackTrace();
         }
-        return null;
+        return doctors.iterator();
+    }
+
+    public Iterator<Employee> getAllEmployees(){
+        String sql = "SELECT first_name, last_name, username, type FROM Employee";
+        ArrayList<Employee> employees = new ArrayList<>();
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            while(set.next()){
+                Employee employee = new Employee();
+                employee.setFirstName( set.getString("first_name") );
+                employee.setLastName( set.getString("last_name") );
+                employee.setUsername( set.getString("username") );
+                employee.setType(Employee.Type.fromString(set.getString("type")));
+                employees.add(employee);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return employees.iterator();
     }
 
     public boolean doctorExists(String username){
@@ -273,13 +283,26 @@ public class Hospital {
         }
     }
 
-    public Iterator<Patient> getAllPatients(){
+    public boolean doctorExists(){
+        String sql = "SELECT username FROM Doctor";
+        try {
+            PreparedStatement preparedStmt = conn.prepareStatement(sql);
+            ResultSet set = preparedStmt.executeQuery();
+            return (set.next()) ? true : false;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Patient> getAllPatients(){
         String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor FROM PATIENT";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
 
-            ArrayList<Patient> patients = new ArrayList<>();
+            List<Patient> patients = new ArrayList<>();
 
             while(set.next()){
                 Patient patient = new Patient();
@@ -290,7 +313,7 @@ public class Hospital {
                 patient.setDoctor( set.getString("doctor") );
                 patients.add(patient);
             }
-            return patients.iterator();
+            return patients;
 
         }
         catch (SQLException e){
@@ -299,7 +322,7 @@ public class Hospital {
         return null;
     }
 
-    public Iterator<Patient> getPatientsOfDoctor(Employee doctor){
+    public List<Patient> getPatientsOfDoctor(Employee doctor){
         String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor "
                 + "FROM Patient "
                 + "WHERE doctor = '" + doctor.getUsername() + "'";
@@ -307,7 +330,7 @@ public class Hospital {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
 
-            ArrayList<Patient> patients = new ArrayList<>();
+            List<Patient> patients = new ArrayList<>();
 
             while(set.next()){
                 Patient patient = new Patient();
@@ -318,7 +341,7 @@ public class Hospital {
                 patient.setDoctor( set.getString("doctor") );
                 patients.add(patient);
             }
-            return patients.iterator();
+            return patients;
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -327,20 +350,142 @@ public class Hospital {
         return null;
     }
 
-    // TODO actually make these methods
     public MedicalHistory getMedicalHistory(Patient patient) {
+        String sql = "SELECT patient_ID, blood_type, family_history, past_conditions, allergies, medications "
+                + "FROM medical_history "
+                + "WHERE patient_ID = '" + patient.getPatientID() + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet result = st.executeQuery(sql);
+            if (!result.next()) {
+                return null;
+            }
+            MedicalHistory medicalHistory = new MedicalHistory();
+
+            medicalHistory.setPatientID(result.getString("patient_ID"));
+            medicalHistory.setBloodType(result.getString("blood_type"));
+            medicalHistory.setFamilyHistory(result.getString("family_history"));
+            medicalHistory.setPastConditions(result.getString("past_conditions"));
+            medicalHistory.setAllergies(result.getString("allergies"));
+            medicalHistory.setMedications(result.getString("medications"));
+            return medicalHistory;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //medical history not found
         return null;
     }
 
-    public Iterator<Appointment> getAppointmentsOfPatient(String patientId){
+    public List<Appointment> getAppointmentsOfPatient(String patientId){
+        String sql = "SELECT username, patient_ID, date, reason_for_visit "
+                + "FROM appointment "
+                + "WHERE patient_ID = '" + patientId + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            List<Appointment> appointments = new ArrayList<>();
+
+            while(set.next()){
+                Appointment appointment = new Appointment();
+                appointment.setUsername( set.getString("username") );
+                appointment.setPatientID( set.getString("patient_ID") );
+                appointment.setDateTime( set.getString("date") );
+                appointment.setReasonForVisit( set.getString("reason_for_visit") );
+
+                appointments.add(appointment);
+            }
+            return appointments;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //appointments not found
         return null;
     }
 
-    public Iterator<MedicalRecord> getRecordsOfPatient(String patientId){
+    public List<Appointment> getAppointmentsOfEmployee(String username){
+        String sql = "SELECT username, patient_ID, date, reason_for_visit "
+                + "FROM appointment "
+                + "WHERE patient_ID = '" + username + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            List<Appointment> appointments = new ArrayList<>();
+
+            while(set.next()){
+                Appointment appointment = new Appointment();
+                appointment.setUsername( set.getString("username") );
+                appointment.setPatientID( set.getString("patient_ID") );
+                appointment.setDateTime( set.getString("date") );
+                appointment.setReasonForVisit( set.getString("reason_for_visit") );
+
+                appointments.add(appointment);
+            }
+            return appointments;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //appointments not found
         return null;
     }
 
-    public Iterator<Prescription> getPrescriptionsOfPatient(String patientId) {
+    public List<MedicalRecord> getRecordsOfPatient(String patientId){
+        String sql = "SELECT username, patient_ID, date, notes "
+                + "FROM medical_record "
+                + "WHERE patient_ID = '" + patientId + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            List<MedicalRecord> medicalRecords = new ArrayList<>();
+
+            while(set.next()){
+                MedicalRecord medicalRecord = new MedicalRecord();
+                medicalRecord.setUsername( set.getString("username") );
+                medicalRecord.setPatientID( set.getString("patient_ID") );
+                medicalRecord.setDateTime( set.getString("date") );
+                medicalRecord.setNotes( set.getString("notes") );
+
+                medicalRecords.add(medicalRecord);
+            }
+            return medicalRecords;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //records not found
+        return null;
+    }
+
+    public List<Prescription> getPrescriptionsOfPatient(String patientId) {
+        String sql = "SELECT patient_ID, prescription_ID, drug_name, dosage, duration "
+                + "FROM medical_record "
+                + "WHERE patient_ID = '" + patientId + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            List<Prescription> prescriptions = new ArrayList<>();
+
+            while(set.next()){
+                Prescription prescription = new Prescription();
+                prescription.setPatientID( set.getString("patient_ID") );
+                prescription.setPrescriptionID( set.getString("prescription_ID") );
+                prescription.setDrugName( set.getString("drug_name") );
+                prescription.setDosage( set.getString("dosage") );
+                prescription.setDuration( set.getString("duration") );
+                prescriptions.add(prescription);
+            }
+            return prescriptions;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //prescriptions not found
         return null;
     }
 

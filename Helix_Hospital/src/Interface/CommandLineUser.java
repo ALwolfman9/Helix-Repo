@@ -19,7 +19,7 @@ public abstract class CommandLineUser extends CommandLine{
 
     void viewDoctors(){
         Iterator<Employee> doctors = hospital.getAllDoctors();
-        if(doctors == null) System.out.println("There are no doctors.");
+        if(!doctors.hasNext()) System.out.println("There are no doctors.");
         else {
             System.out.println(String.format("%30s%15s%15s", "Name", "Username", "Type"));
             while (doctors.hasNext()) {
@@ -29,16 +29,12 @@ public abstract class CommandLineUser extends CommandLine{
     }
 
     void viewPatients() {
-        Iterator<Patient> patients = hospital.getAllPatients();
-        //TODO for all of these where it says ____ == null, it's wrong, because it's not null, the iterator is just empty
-        if(patients == null) System.out.println("There are no patients.");
+        List<Patient> patients = hospital.getAllPatients();
+        if(patients.size() < 1) System.out.println("There are no patients.");
         else {
-            List<Patient> patientList = new ArrayList<>();
             System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            while (patients.hasNext()) {
-                Patient p = patients.next();
+            for (Patient p : patients) {
                 System.out.println(p.toString());
-                patientList.add(p);
             }
             while (true) {
                 System.out.println("Enter a patient ID to view their profile, or enter 'q' to go back to home");
@@ -54,7 +50,7 @@ public abstract class CommandLineUser extends CommandLine{
                         break;
                 }
                 Patient selectedPatient = null;
-                for (Patient p : patientList) {
+                for (Patient p : patients) {
                     if (p.getPatientID().equals(cmdArgs[0])) {
                         selectedPatient = p;
                     }
@@ -162,10 +158,15 @@ public abstract class CommandLineUser extends CommandLine{
     void viewPatientAppointments(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        Iterator<Appointment> appointments = hospital.getAppointmentsOfPatient(patient.getPatientID());
+        List<Appointment> appointments = hospital.getAppointmentsOfPatient(patient.getPatientID());
 
         if(appointments == null) System.out.println("There are no appointments.");
-        else //TODO Print out the appointments
+        else {
+            for(Appointment appointment : appointments){
+                //TODO create appointment toString for it to print correctly
+                System.out.println(appointment);
+            }
+        }
 
         System.out.println("\n=================================");
         System.out.println(String.format(""));
@@ -178,6 +179,7 @@ public abstract class CommandLineUser extends CommandLine{
                 case "A":
                 case "add":
                     addAppointment(patient);
+                    break;
                 case "q":
                 case "Q":
                 case "quit":
@@ -206,17 +208,30 @@ public abstract class CommandLineUser extends CommandLine{
         System.out.println("Create an Appointment");
         System.out.println("Is this appointment with the patient's primary care doctor? (y or n)");
         String question = in.nextLine();
+
         if(question.equals("y")) doctor = patient.getDoctor();
         else {
             while (true) {
+                if (!hospital.doctorExists()) {
+                    System.out.println("Appointment cannot be created; there are no doctors in the system");
+                    System.out.println("Quitting appointment creation");
+                    return;
+                }
                 System.out.println("Enter the username of the doctor this appointment is with: ");
-                System.out.println("(Enter $list to list each doctor and their usernames)");
+                System.out.println("(Enter $list to list each doctor and their usernames | " +
+                        "Enter $quit to cancel appointment)");
                 doctor = in.nextLine();
                 if (doctor.equals("$1ist")) {
                     viewDoctors();
                 } else if (!hospital.doctorExists(doctor)) {
                     System.out.println("A doctor with the given username does not exist");
-                } else {
+                } else if (doctor.equals("$quit")){
+                    //there are no doctors to choose from or canceling appointment creation
+                    System.out.println("Quitting appointment creation");
+                    return;
+                }
+                else{
+                    //selected a valid doctor, breaking out of while loop
                     break;
                 }
             }

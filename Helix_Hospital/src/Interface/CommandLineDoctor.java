@@ -56,15 +56,12 @@ public class CommandLineDoctor extends CommandLineUser {
 
     @Override
     void viewPatients() {
-        Iterator<Patient> patients = hospital.getPatientsOfDoctor(user);
-        if(patients == null) System.out.println("You have no patients.");
+        List<Patient> patients = hospital.getPatientsOfDoctor(user);
+        if(patients.size() < 1) System.out.println("You have no patients.");
         else {
-            List<Patient> patientList = new ArrayList<>();
             System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            while (patients.hasNext()) {
-                Patient p = patients.next();
+            for (Patient p : patients) {
                 System.out.println(p.toString());
-                patientList.add(p);
             }
             while (true) {
                 System.out.println("Enter a patient ID to view their profile, or enter 'q' to go back to home");
@@ -80,7 +77,7 @@ public class CommandLineDoctor extends CommandLineUser {
                         break;
                 }
                 Patient selectedPatient = null;
-                for (Patient p : patientList) {
+                for (Patient p : patients) {
                     if (p.getPatientID().equals(cmdArgs[0])) {
                         selectedPatient = p;
                     }
@@ -113,6 +110,7 @@ public class CommandLineDoctor extends CommandLineUser {
                 case "I":
                 case "info":
                     viewPatientInfo(patient);
+                    break;
                 case "h":
                 case "H":
                 case "history":
@@ -127,10 +125,12 @@ public class CommandLineDoctor extends CommandLineUser {
                 case "R":
                 case "records":
                     viewPatientRecords(patient);
+                    break;
                 case "p":
                 case "P":
                 case "prescriptions":
                     viewPatientPrescriptions(patient);
+                    break;
                 case "q":
                 case "Q":
                 case "quit":
@@ -156,12 +156,17 @@ public class CommandLineDoctor extends CommandLineUser {
     private void viewPatientRecords(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        Iterator<MedicalRecord> records = hospital.getRecordsOfPatient(patient.getPatientID());
+        List<MedicalRecord> records = hospital.getRecordsOfPatient(patient.getPatientID());
 
-        if(records == null) System.out.println("There are no appointments.");
-        else //TODO Print out the records
+        if(records == null) System.out.println("There are no records.");
+        else {
+            for(MedicalRecord record : records){
+                //TODO create MedicalRecord toString for it to print correctly
+                System.out.println(record);
+            }
+        }
 
-            System.out.println("\n=================================");
+        System.out.println("\n=================================");
         System.out.println(String.format(""));
         while(true) {
             printPatientRecordsHelp();
@@ -211,12 +216,17 @@ public class CommandLineDoctor extends CommandLineUser {
     private void viewPatientPrescriptions(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        Iterator<Prescription> prescriptions = hospital.getPrescriptionsOfPatient(patient.getPatientID());
+        List<Prescription> prescriptions = hospital.getPrescriptionsOfPatient(patient.getPatientID());
 
         if(prescriptions == null) System.out.println("There are no prescriptions.");
-        else //TODO Print out the records
+        else {
+            for(Prescription prescription : prescriptions){
+                //TODO create Prescription toString for it to print correctly
+                System.out.println(prescription);
+            }
+        }
 
-            System.out.println("\n=================================");
+        System.out.println("\n=================================");
         System.out.println(String.format(""));
         while(true) {
             printPatientPrescriptionsHelp();
@@ -261,11 +271,8 @@ public class CommandLineDoctor extends CommandLineUser {
         System.out.println("Enter the duration:");
         duration = in.nextLine();
 
-        System.out.println("Enter the prescriptionID:");
-        id = in.nextLine();
-
         //TODO Is prescriptionID auto generated, like patientID?
-        hospital.addPrescription(patient.getPatientID(), id, drug, dosage, duration);
+        hospital.addPrescription(patient.getPatientID(), drug, dosage, duration);
 
     }
 
