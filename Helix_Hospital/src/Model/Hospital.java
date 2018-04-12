@@ -352,6 +352,29 @@ public class Hospital {
 
     // TODO actually make these methods
     public MedicalHistory getMedicalHistory(Patient patient) {
+        String sql = "SELECT patient_ID, blood_type, family_history, past_conditions, allergies, medications "
+                + "FROM medical_history "
+                + "WHERE patient_ID = '" + patient.getPatientID() + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet result = st.executeQuery(sql);
+            if (!result.next()) {
+                return null;
+            }
+            MedicalHistory medicalHistory = new MedicalHistory();
+
+            medicalHistory.setPatientID(result.getString("patient_ID"));
+            medicalHistory.setBloodType(result.getString("blood_type"));
+            medicalHistory.setFamilyHistory(result.getString("family_history"));
+            medicalHistory.setPastConditions(result.getString("past_conditions"));
+            medicalHistory.setAllergies(result.getString("allergies"));
+            medicalHistory.setMedications(result.getString("medications"));
+            return medicalHistory;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //medical history not found
         return null;
     }
 
