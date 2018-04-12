@@ -56,15 +56,12 @@ public class CommandLineDoctor extends CommandLineUser {
 
     @Override
     void viewPatients() {
-        Iterator<Patient> patients = hospital.getPatientsOfDoctor(user);
+        List<Patient> patients = hospital.getPatientsOfDoctor(user);
         if(patients == null) System.out.println("You have no patients.");
         else {
-            List<Patient> patientList = new ArrayList<>();
             System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            while (patients.hasNext()) {
-                Patient p = patients.next();
+            for (Patient p : patients) {
                 System.out.println(p.toString());
-                patientList.add(p);
             }
             while (true) {
                 System.out.println("Enter a patient ID to view their profile, or enter 'q' to go back to home");
@@ -80,7 +77,7 @@ public class CommandLineDoctor extends CommandLineUser {
                         break;
                 }
                 Patient selectedPatient = null;
-                for (Patient p : patientList) {
+                for (Patient p : patients) {
                     if (p.getPatientID().equals(cmdArgs[0])) {
                         selectedPatient = p;
                     }
