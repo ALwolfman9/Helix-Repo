@@ -19,7 +19,7 @@ public abstract class CommandLineUser extends CommandLine{
 
     void viewDoctors(){
         Iterator<Employee> doctors = hospital.getAllDoctors();
-        if(doctors == null) System.out.println("There are no doctors.");
+        if(!doctors.hasNext()) System.out.println("There are no doctors.");
         else {
             System.out.println(String.format("%30s%15s%15s", "Name", "Username", "Type"));
             while (doctors.hasNext()) {

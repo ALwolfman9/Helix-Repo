@@ -3,6 +3,7 @@ package Interface;
 import Model.*;
 import static Model.Employee.Gender;
 
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -27,7 +28,12 @@ public class CommandLineAdmin extends CommandLine {
             switch(cmd){
                 case "e":
                 case "E":
-                case "employee":
+                case "employees":
+                    viewEmployees();
+                    break;
+                case "n":
+                case "N":
+                case "new":
                     if(!createEmployee()) System.out.println("Employee could not be created");
                     break;
                 case "l":
@@ -42,9 +48,21 @@ public class CommandLineAdmin extends CommandLine {
 
     private void printHelp(){
         System.out.println();
-        System.out.println("Usage: employee/e/E | logout/l/L");
-        System.out.println("employee/e/E\t\tAdd a new employee");
+        System.out.println("Usage: employees/e/E | new/n/N | logout/l/L");
+        System.out.println("employees/e/E\t\tView all employees");
+        System.out.println("new/n/N\t\t\t\tAdd a new employee");
         System.out.println("logout/l/L\t\t\tLogout of the Hospital application");
+    }
+
+    public void viewEmployees(){
+        Iterator<Employee> employees = hospital.getAllEmployees();
+        if(!employees.hasNext()) System.out.println("There are no employees");
+        else {
+            System.out.println(String.format("%30s%15s%15s", "Name", "Username", "Type"));
+            while (employees.hasNext()) {
+                System.out.println(employees.next().toString());
+            }
+        }
     }
 
     private boolean createEmployee(){

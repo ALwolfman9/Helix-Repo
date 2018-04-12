@@ -154,9 +154,6 @@ public class Employee extends Person{
 
     @Override
     public String toString() {
-        if(type == Type.DOCTOR)
-            return String.format("%30s%15s%15s", firstName + " " + lastName, username, type.toString());
-        else
-            return String.format("%30s%15s", firstName + " " + lastName, username);
+        return String.format("%30s%15s%15s", firstName + " " + lastName, username, type.toString());
     }
 }

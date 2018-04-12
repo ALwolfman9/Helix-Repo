@@ -227,11 +227,10 @@ public class Hospital {
         String sql = "SELECT first_name, last_name, Doctor.username, type " +
                      "FROM Doctor, Employee " +
                      "WHERE Doctor.username = Employee.username";
+        ArrayList<Employee> doctors = new ArrayList<>();
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
-
-            ArrayList<Employee> doctors = new ArrayList<>();
 
             while(set.next()){
                 Employee doctor = new Employee();
@@ -241,13 +240,33 @@ public class Hospital {
                 doctor.setType(Employee.Type.fromString(set.getString("type")));
                 doctors.add(doctor);
             }
-            return doctors.iterator();
-
         }
         catch (SQLException e){
             e.printStackTrace();
         }
-        return null;
+        return doctors.iterator();
+    }
+
+    public Iterator<Employee> getAllEmployees(){
+        String sql = "SELECT first_name, last_name, username, type FROM Employee";
+        ArrayList<Employee> employees = new ArrayList<>();
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            while(set.next()){
+                Employee employee = new Employee();
+                employee.setFirstName( set.getString("first_name") );
+                employee.setLastName( set.getString("last_name") );
+                employee.setUsername( set.getString("username") );
+                employee.setType(Employee.Type.fromString(set.getString("type")));
+                employees.add(employee);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return employees.iterator();
     }
 
     public boolean doctorExists(String username){
