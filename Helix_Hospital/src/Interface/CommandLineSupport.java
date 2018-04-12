@@ -58,6 +58,8 @@ public class CommandLineSupport extends CommandLineUser {
 
         String firstName, lastName, insuranceID, doctor;
 
+        //TODO check that there's a doctor
+
         System.out.println();
         System.out.println("Create an Patient");
         System.out.println("Enter first name: ");

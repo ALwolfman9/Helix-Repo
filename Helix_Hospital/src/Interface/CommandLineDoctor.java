@@ -141,7 +141,6 @@ public class CommandLineDoctor extends CommandLineUser {
         }
     }
 
-
     void printPatientViewHelp(Patient p){
         String name = p.getFirstName();
         System.out.println();
@@ -269,5 +268,6 @@ public class CommandLineDoctor extends CommandLineUser {
         hospital.addPrescription(patient.getPatientID(), id, drug, dosage, duration);
 
     }
+
 
 }
