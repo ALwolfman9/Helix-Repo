@@ -349,7 +349,7 @@ public class Hospital {
         //do something with the sql
         return null;
     }
-    
+
     public MedicalHistory getMedicalHistory(Patient patient) {
         String sql = "SELECT patient_ID, blood_type, family_history, past_conditions, allergies, medications "
                 + "FROM medical_history "
@@ -381,6 +381,34 @@ public class Hospital {
         String sql = "SELECT username, patient_ID, date, reason_for_visit "
                 + "FROM appointment "
                 + "WHERE patient_ID = '" + patientId + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+
+            List<Appointment> appointments = new ArrayList<>();
+
+            while(set.next()){
+                Appointment appointment = new Appointment();
+                appointment.setUsername( set.getString("username") );
+                appointment.setPatientID( set.getString("patient_ID") );
+                appointment.setDateTime( set.getString("date") );
+                appointment.setReasonForVisit( set.getString("reason_for_visit") );
+
+                appointments.add(appointment);
+            }
+            return appointments;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        //appointments not found
+        return null;
+    }
+
+    public List<Appointment> getAppointmentsOfEmployee(String username){
+        String sql = "SELECT username, patient_ID, date, reason_for_visit "
+                + "FROM appointment "
+                + "WHERE patient_ID = '" + username + "'";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
