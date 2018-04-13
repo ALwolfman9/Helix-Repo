@@ -77,4 +77,13 @@ public class MedicalHistory {
         this.familyHistory = familyHistory;
     }
     // endregion
+
+    public String toString(){
+        String view = "Blood Type: " + bloodType
+                + "\nAllergies: " + allergies
+                + "\nMedications: " + medications
+                + "\nPast Conditions: " + pastConditions
+                + "\nFamily History: " + familyHistory;
+        return view;
+    }
 }

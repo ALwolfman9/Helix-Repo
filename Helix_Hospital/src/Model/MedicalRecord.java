@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class MedicalRecord {
+    static DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     //region fields
     private String username;
     private String patientID;
@@ -71,4 +73,14 @@ public class MedicalRecord {
         this.notes = notes;
     }
     // endregion
+
+
+    @Override
+    public String toString() {
+        String view = "Doctor Username: " + username
+                + "\nPatient ID: " + patientID
+                + "\nDate: " + dateTime.format(f)
+                + "\nNotes: " + notes;
+        return view;
+    }
 }
