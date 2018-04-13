@@ -304,9 +304,10 @@ public class Hospital {
         return doctors.iterator();
     }
 
-    public Iterator<Employee> getAllEmployees(){
-        String sql = "SELECT first_name, last_name, username, type FROM Employee";
-        ArrayList<Employee> employees = new ArrayList<>();
+    public List<Employee> getAllEmployees(){
+        String sql = "SELECT first_name, middle_initial, last_name, username, phone, " +
+                "sex, ssn, email, address, type FROM Employee";
+        List<Employee> employees = new ArrayList<>();
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
@@ -314,8 +315,24 @@ public class Hospital {
             while(set.next()){
                 Employee employee = new Employee();
                 employee.setFirstName( set.getString("first_name") );
+                employee.setMiddleInit(set.getString("middle_initial"));
                 employee.setLastName( set.getString("last_name") );
                 employee.setUsername( set.getString("username") );
+                employee.setPhoneNumber(set.getString("phone"));
+                switch(set.getString("sex")){
+                    case "M":
+                        employee.setGender(Person.Gender.M);
+                        break;
+                    case "F":
+                        employee.setGender(Person.Gender.F);
+                        break;
+                    case "O":
+                        employee.setGender(Person.Gender.O);
+                        break;
+                }
+                employee.setSsn(set.getString("ssn"));
+                employee.setEmail(set.getString("email"));
+                employee.setAddress(set.getString("address"));
                 employee.setType(Employee.Type.fromString(set.getString("type")));
                 employees.add(employee);
             }
@@ -323,7 +340,7 @@ public class Hospital {
         catch (SQLException e){
             e.printStackTrace();
         }
-        return employees.iterator();
+        return employees;
     }
 
     public boolean doctorExists(String username){
@@ -354,7 +371,8 @@ public class Hospital {
     }
 
     public List<Patient> getAllPatients(){
-        String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor FROM PATIENT";
+        String sql = "SELECT patient_ID, first_name, middle_initial, last_name, email, " +
+                "address, sex, insurance_ID, phone, doctor FROM PATIENT";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
@@ -365,8 +383,23 @@ public class Hospital {
                 Patient patient = new Patient();
                 patient.setPatientID( set.getString("patient_ID") );
                 patient.setFirstName( set.getString("first_name") );
+                patient.setMiddleInit(set.getString("middle_initial"));
                 patient.setLastName( set.getString("last_name") );
+                patient.setEmail(set.getString("email"));
+                patient.setAddress(set.getString("address"));
+                switch(set.getString("sex")){
+                    case "M":
+                        patient.setGender(Person.Gender.M);
+                        break;
+                    case "F":
+                        patient.setGender(Person.Gender.F);
+                        break;
+                    case "O":
+                        patient.setGender(Person.Gender.O);
+                        break;
+                }
                 patient.setInsuranceID( set.getString("insurance_Id") );
+                patient.setPhoneNumber(set.getString("phone"));
                 patient.setDoctor( set.getString("doctor") );
                 patients.add(patient);
             }
@@ -380,7 +413,8 @@ public class Hospital {
     }
 
     public List<Patient> getPatientsOfDoctor(Employee doctor){
-        String sql = "SELECT patient_ID, first_name, last_name, insurance_ID, doctor "
+        String sql = "SELECT patient_ID, first_name, middle_initial, last_name, email, "
+                + "address, sex, insurance_ID, phone, doctor "
                 + "FROM Patient "
                 + "WHERE doctor = '" + doctor.getUsername() + "'";
         try {
@@ -393,8 +427,23 @@ public class Hospital {
                 Patient patient = new Patient();
                 patient.setPatientID( set.getString("patient_ID") );
                 patient.setFirstName( set.getString("first_name") );
+                patient.setMiddleInit(set.getString("middle_initial"));
                 patient.setLastName( set.getString("last_name") );
+                patient.setEmail(set.getString("email"));
+                patient.setAddress(set.getString("address"));
+                switch(set.getString("sex")){
+                    case "M":
+                        patient.setGender(Person.Gender.M);
+                        break;
+                    case "F":
+                        patient.setGender(Person.Gender.F);
+                        break;
+                    case "O":
+                        patient.setGender(Person.Gender.O);
+                        break;
+                }
                 patient.setInsuranceID( set.getString("insurance_Id") );
+                patient.setPhoneNumber(set.getString("phone"));
                 patient.setDoctor( set.getString("doctor") );
                 patients.add(patient);
             }
@@ -735,7 +784,7 @@ public class Hospital {
     }
     
 
-    private String formatGender(Employee.Gender g){
+    public static String formatGender(Employee.Gender g){
         if(g == null) return null;
         switch (g){
             case O:
@@ -750,7 +799,7 @@ public class Hospital {
 
     }
 
-    private String formatType(Employee.Type t){
+    public static String formatType(Employee.Type t){
         if(t == null) return null;
         switch (t){
             case DOCTOR:

@@ -116,9 +116,7 @@ public class CommandLineSupport extends CommandLineUser {
         while(true) {
 
             //TODO make this display all the patient's info
-            System.out.println("\n=================================");
-            System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            System.out.println(patient.toString());
+            displayPatientInfo(patient);
             printPatientInfoHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
@@ -195,7 +193,7 @@ public class CommandLineSupport extends CommandLineUser {
     private void printPatientInfoHelp(){
         System.out.println();
         System.out.println("Usage: e/E/edit | quit/q/Q");
-        System.out.println("Usage: edit/e/E\t\t\tEdit the patient info");
+        System.out.println("edit/e/E\t\t\tEdit the patient info");
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 

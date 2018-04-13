@@ -70,16 +70,27 @@ public abstract class CommandLineUser extends CommandLine{
 
     abstract void viewPatient(Patient p);
 
+    void displayPatientInfo(Patient p){
+
+        System.out.println("\n=================================");
+
+        if(p.getMiddleInit() == null) System.out.println("Name: " + p.getFirstName() + " " + p.getLastName());
+        else System.out.println("Name: " + p.getFirstName() + " " + p.getMiddleInit() + " " + p.getLastName());
+
+        System.out.println("Doctor's username : " + p.getDoctor());
+        System.out.println("InsuranceID: " + p.getInsuranceID());
+        System.out.println("Gender: " + Hospital.formatGender(p.getGender()));
+        System.out.println("Address: " + p.getAddress());
+        System.out.println("Phone Number: " + p.getPhoneNumber());
+        System.out.println("Email Address: " + p.getEmail());
+    }
+
     void viewPatientInfo(Patient patient){
         Scanner in = new Scanner(System.in);
 
         while(true) {
 
-            //TODO make this print out all the patient's info
-
-            System.out.println("\n=================================");
-            System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            System.out.println(patient.toString());
+            displayPatientInfo(patient);
             printPatientInfoHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");

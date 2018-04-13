@@ -91,7 +91,7 @@ public class CommandLineNurse extends CommandLineUser {
         System.out.println("Usage: info/i/I | history/h/H| appointments/a/A| quit/q/Q");
         System.out.println(String.format("info/i/I\t\t\tView, %s's Patient Info", name));
         System.out.println(String.format("history/h/H\t\t\tView, edit, and add %s's Medical History", name));
-        System.out.println(String.format("appointments/a/A\t\t\tView, edit, and add to %s's Appointments", name));
+        System.out.println(String.format("appointments/a/A\tView, edit, and add to %s's Appointments", name));
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 }

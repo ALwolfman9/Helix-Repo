@@ -1,11 +1,9 @@
 package Interface;
 
 import Model.*;
-import static Model.Employee.Gender;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class CommandLineAdmin extends CommandLine {
 
@@ -17,10 +15,10 @@ public class CommandLineAdmin extends CommandLine {
     public void run(){
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=================================");
-        System.out.println("Welcome admin!");
-
         while(true) {
+
+            System.out.println("\n=================================");
+            System.out.println("Welcome admin!");
             printHelp();
             String cmd = in.next();
 
@@ -55,12 +53,40 @@ public class CommandLineAdmin extends CommandLine {
     }
 
     public void viewEmployees(){
-        Iterator<Employee> employees = hospital.getAllEmployees();
-        if(!employees.hasNext()) System.out.println("There are no employees");
+        List<Employee> employees = hospital.getAllEmployees();
+        if(employees.size() < 1) System.out.println("There are no employees");
         else {
-            System.out.println(String.format("%30s%15s%15s", "Name", "Username", "Type"));
-            while (employees.hasNext()) {
-                System.out.println(employees.next().toString());
+            while(true) {
+                System.out.println("\n=================================");
+                System.out.println(String.format("%30s%15s%15s", "Name", "Username", "Type"));
+                for(Employee e : employees) {
+                    System.out.println(e.toString());
+                }
+
+                System.out.println("\nEnter an employee's username to view their profile, or enter 'q' to go back to home");
+                Scanner in = new Scanner(System.in);
+                String cmd = in.nextLine();
+                String[] cmdArgs = cmd.split("\\s+");
+                switch (cmdArgs[0]) {
+                    case "q":
+                    case "Q":
+                    case "quit":
+                        return;
+                    default:
+                        break;
+                }
+                Employee selectedEmployee = null;
+                for (Employee e : employees) {
+                    if (e.getUsername().equals(cmdArgs[0])) {
+                        selectedEmployee = e;
+                    }
+                }
+                if (selectedEmployee != null) {
+                    viewEmployeeInfo(selectedEmployee);
+                }
+                else {
+                    System.out.println("That command was not recognized");
+                }
             }
         }
     }
@@ -92,6 +118,97 @@ public class CommandLineAdmin extends CommandLine {
 
         return hospital.addEmployee(username, firstName, middleInitial, lastName, phone,
                 gender, ssn, email, address, type);
+    }
+
+    void viewEmployeeInfo(Employee employee){
+        Scanner in = new Scanner(System.in);
+        while(true) {
+
+            displayEmployeeInfo(employee);
+            printEmployeeInfoHelp();
+            String cmd = in.nextLine();
+            String[] cmdArgs = cmd.split("\\s+");
+            switch(cmdArgs[0]){
+                case "e":
+                case "E":
+                case "edit":
+                    editEmployeeInfo(employee);
+                    break;
+                case "q":
+                case "Q":
+                case "quit":
+                    return;
+                default:
+                    System.out.println("That command/ID was not recognized");
+            }
+        }
+    }
+
+    void displayEmployeeInfo(Employee e){
+
+        System.out.println("\n=================================");
+
+        if(e.getMiddleInit() == null) System.out.println("Name: " + e.getFirstName() + " " + e.getLastName());
+        else System.out.println("Name: " + e.getFirstName() + " " + e.getMiddleInit() + " " + e.getLastName());
+
+        System.out.println("Employee Type: " + Hospital.formatType(e.getType()));
+        System.out.println("Username: " + e.getUsername());
+        System.out.println("SSN: " + e.getSsn());
+        System.out.println("Gender: " + Hospital.formatGender(e.getGender()));
+        System.out.println("Address: " + e.getAddress());
+        System.out.println("Phone Number: " + e.getPhoneNumber());
+        System.out.println("Email Address: " + e.getEmail());
+    }
+
+    private void editEmployeeInfo(Employee employee){
+        Scanner in = new Scanner(System.in);
+
+        System.out.println();
+        System.out.println("Edit an Employee");
+
+        System.out.println("Current first name is " + employee.getFirstName());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            employee.setFirstName(firstNameValidation(in));
+
+        System.out.println("Current middle intial is " + employee.getMiddleInit());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            employee.setMiddleInit(middleInitialValidation(in));
+
+        System.out.println("Current last name is " + employee.getLastName());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            employee.setLastName(lastNameValidation(in));
+
+        System.out.println("Current phone number is " + employee.getPhoneNumber());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            employee.setPhoneNumber(phoneValidation(in));
+
+        System.out.println("Current gender is " + employee.getGender());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            employee.setGender(genderValidation(in));
+
+        System.out.println("Current email is " + employee.getEmail());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            employee.setEmail(emailValidation(in));
+
+        System.out.println("Current address is " + employee.getAddress());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            employee.setAddress(addressValidation(in));
+
+        hospital.updateEmployee(employee);
+    }
+
+    private void printEmployeeInfoHelp(){
+        System.out.println();
+        System.out.println("Usage: e/E/edit | quit/q/Q");
+        System.out.println("edit/e/E\t\t\tEdit the employee info");
+        System.out.println("quit/q/Q\t\t\tGo back to employee selection");
     }
 
     private String usernameValidation(Scanner in){

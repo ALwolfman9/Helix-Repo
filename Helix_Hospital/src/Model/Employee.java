@@ -4,7 +4,7 @@ public class Employee extends Person{
     //region fields
     private String username;
     private String firstName;
-    private char middleInit;
+    private String middleInit;
     private String lastName;
     private String phoneNumber;
     private String email;
@@ -15,7 +15,7 @@ public class Employee extends Person{
     //endregion
 
     //region constructors
-    Employee(String username, String firstName, char middleInit, String lastName, String phoneNumber, String email, String address, Gender gender, String ssn, Type type){
+    Employee(String username, String firstName, String middleInit, String lastName, String phoneNumber, String email, String address, Gender gender, String ssn, Type type){
         this.username = username;
         this.firstName = firstName;
         this.middleInit = middleInit;
@@ -32,7 +32,7 @@ public class Employee extends Person{
         this.username = null;
         this.type = null;
         this.firstName = null;
-        this.middleInit = '\u0000';
+        this.middleInit = null;
         this.lastName = null;
         this.email = null;
         this.address = null;
@@ -86,11 +86,11 @@ public class Employee extends Person{
         this.firstName = firstName;
     }
 
-    public char getMiddleInit() {
+    public String getMiddleInit() {
         return middleInit;
     }
 
-    public void setMiddleInit(char middleInit) {
+    public void setMiddleInit(String middleInit) {
         this.middleInit = middleInit;
     }
 

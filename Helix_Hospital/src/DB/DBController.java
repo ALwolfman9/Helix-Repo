@@ -76,7 +76,7 @@ public class DBController {
 			createString = "CREATE TABLE IF NOT EXISTS medical_record ("
 					+ "username VARCHAR(30) NOT NULL,"
 					+ "patient_ID bigint NOT NULL,"
-					+ "date DATETIME NOT NULL,"
+					+ "date TIMESTAMP NOT NULL,"
 					+ "notes VARCHAR(255),"
 					+ "FOREIGN KEY (username) REFERENCES EMPLOYEE(username),"
 					+ "FOREIGN KEY (patient_ID) REFERENCES PATIENT(patient_ID),"
