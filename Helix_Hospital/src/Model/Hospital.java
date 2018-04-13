@@ -258,7 +258,7 @@ public class Hospital {
     		preparedStmt = conn.prepareStatement(sql);
     		preparedStmt.setString(1, username);
     		preparedStmt.setString(2, patientID);
-    		Timestamp ts = Timestamp.valueOf(dateTime.toString());
+            Timestamp ts = Timestamp.valueOf(dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     		preparedStmt.setTimestamp(3, ts);
     		preparedStmt.setString(4, notes);
     		preparedStmt.execute();
