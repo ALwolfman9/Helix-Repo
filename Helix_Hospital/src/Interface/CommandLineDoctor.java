@@ -2,6 +2,7 @@ package Interface;
 
 import Model.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,10 +19,10 @@ public class CommandLineDoctor extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=================================");
-        System.out.println(String.format("Welcome Dr. %s %s!", user.getFirstName(), user.getLastName()));
-
         while(true) {
+
+            System.out.println("\n=================================");
+            System.out.println(String.format("Welcome Dr. %s %s!", user.getFirstName(), user.getLastName()));
             printHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
@@ -59,12 +60,13 @@ public class CommandLineDoctor extends CommandLineUser {
         List<Patient> patients = hospital.getPatientsOfDoctor(user);
         if(patients.size() < 1) System.out.println("You have no patients.");
         else {
-            System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            for (Patient p : patients) {
-                System.out.println(p.toString());
-            }
             while (true) {
-                System.out.println("Enter a patient ID to view their profile, or enter 'q' to go back to home");
+                System.out.println("\n=================================");
+                System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
+                for (Patient p : patients) {
+                    System.out.println(p.toString());
+                }
+                System.out.println("\nEnter a patient ID to view their profile, or enter 'q' to go back to home");
                 Scanner in = new Scanner(System.in);
                 String cmd = in.nextLine();
                 String[] cmdArgs = cmd.split("\\s+");
@@ -95,13 +97,13 @@ public class CommandLineDoctor extends CommandLineUser {
     void viewPatient(Patient patient) {
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=================================");
-        System.out.println(String.format("Profile of %s %s (Patient ID: %s)",
-                patient.getFirstName(), patient.getLastName(), patient.getPatientID()));
         // support can do 'a' and 'i'
         // nurses can do 'a', 'h', and 'i'
         // doctors can do 'a', 'h', 'r', 'p', and 'i'
         while(true) {
+            System.out.println("\n=================================");
+            System.out.println(String.format("Profile of %s %s (Patient ID: %s)",
+                    patient.getFirstName(), patient.getLastName(), patient.getPatientID()));
             printPatientViewHelp(patient);
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
@@ -145,32 +147,32 @@ public class CommandLineDoctor extends CommandLineUser {
         String name = p.getFirstName();
         System.out.println();
         System.out.println("Usage: info/i/I | history/h/H | records/r/R | appointments/a/A | prescriptions/p/P | quit/q/Q");
-        System.out.println(String.format("info/i/I\t\t\tView, %s's Patient Info", name));
+        System.out.println(String.format("info/i/I\t\t\tView %s's Patient Info", name));
         System.out.println(String.format("history/h/H\t\t\tView, edit, and add %s's Medical History", name));
         System.out.println(String.format("records/r/R\t\t\tView and add to %s's Medical Records", name));
-        System.out.println(String.format("appointments/a/A\t\t\tView, edit, and add to %s's Appointments", name));
-        System.out.println(String.format("prescriptions/p/P\t\t\tView, edit, and add to %s's Prescriptions",name));
+        System.out.println(String.format("appointments/a/A\tView, edit, and add to %s's Appointments", name));
+        System.out.println(String.format("prescriptions/p/P\tView, edit, and add to %s's Prescriptions",name));
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 
     private void viewPatientRecords(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        List<MedicalRecord> records = hospital.getRecordsOfPatient(patient.getPatientID());
-
-        if(records == null) System.out.println("There are no records.");
-        else {
-            System.out.println("Viewing medical records for: " + patient.getFirstName() + " " + patient.getLastName());
-            System.out.println("\n=================================");
-            for(MedicalRecord record : records){
-                System.out.println("\n---------------------------------");
-                System.out.println(record);
-            }
-        }
-
-        System.out.println("\n=================================");
-        System.out.println(String.format(""));
         while(true) {
+
+            List<MedicalRecord> records = hospital.getRecordsOfPatient(patient.getPatientID());
+
+            if(records == null) System.out.println("There are no records.");
+            else {
+                System.out.println("\n=================================");
+                System.out.println("Viewing medical records for: " + patient.getFirstName() + " " + patient.getLastName());
+                System.out.println("=================================");
+                for(MedicalRecord record : records){
+                    System.out.println(record.toString());
+                    System.out.println("---------------------------------");
+                }
+            }
+
             printPatientRecordsHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
@@ -194,45 +196,42 @@ public class CommandLineDoctor extends CommandLineUser {
         System.out.println();
         System.out.println("Usage: add/a/A | quit/q/Q");
         System.out.println("add/a/A\t\t\tAdd a new Medical Record");
-        System.out.println("quit/q/Q\t\t\tGo back to patient selection");
+        System.out.println("quit/q/Q\t\tGo back to patient selection");
     }
 
     private void addMedicalRecord(Patient patient){
         Scanner in = new Scanner(System.in);
-        String datetime, comments;
+        LocalDateTime dateTime;
+        String comments;
 
         System.out.println();
         System.out.println("Add Medical Record");
 
-        System.out.println("Enter the dateTime for this record:");
-        datetime = in.nextLine();
+        dateTime = getDateTime(in, false);
 
         System.out.println("Enter comments on this record:");
         comments = in.nextLine();
 
-        //TODO do the datetime
-        hospital.addMedicalRecord(user.getUsername(), patient.getPatientID(), null, comments);
+        hospital.addMedicalRecord(user.getUsername(), patient.getPatientID(), dateTime, comments);
 
     }
 
     private void viewPatientPrescriptions(Patient patient){
         Scanner in = new Scanner(System.in);
-
-        List<Prescription> prescriptions = hospital.getPrescriptionsOfPatient(patient.getPatientID());
-
-        if(prescriptions == null) System.out.println("There are no prescriptions.");
-        else {
-            System.out.println("Viewing prescriptions for: " + patient.getFirstName() + " " + patient.getLastName());
-            System.out.println("\n=================================");
-            for(Prescription prescription : prescriptions){
-                System.out.println("\n---------------------------------");
-                System.out.println(prescription);
-            }
-        }
-
-        System.out.println("\n=================================");
-        System.out.println(String.format(""));
         while(true) {
+
+            List<Prescription> prescriptions = hospital.getPrescriptionsOfPatient(patient.getPatientID());
+
+            if(prescriptions == null) System.out.println("There are no prescriptions.");
+            else {
+                System.out.println("Viewing prescriptions for: " + patient.getFirstName() + " " + patient.getLastName());
+                System.out.println("=================================");
+                for(Prescription prescription : prescriptions){
+                    System.out.println(prescription);
+                    System.out.println("---------------------------------");
+                }
+            }
+
             printPatientPrescriptionsHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");

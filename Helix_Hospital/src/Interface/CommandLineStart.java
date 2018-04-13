@@ -13,8 +13,9 @@ public class CommandLineStart extends CommandLine {
     @Override
     public void run(){
         Scanner in = new Scanner(System.in);
-        System.out.println("Welcome to the Hospital!");
         while(true){
+            System.out.println("\n=================================");
+            System.out.println("Welcome to the Hospital!");
             printHelp();
             String cmd = in.next();
 

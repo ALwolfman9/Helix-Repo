@@ -189,7 +189,7 @@ public class Hospital {
     }
     
     public boolean addPrescription(String patientID, String drugName, String dosage, String duration) {
-    	String sql = "insert into prescription(patient_ID, prescription_ID, drup_name, dosage, duration) "
+    	String sql = "insert into prescription(patient_ID, drug_name, dosage, duration) "
     			+ " VALUES(?,?,?,?)";
     	boolean committed = false;
     	PreparedStatement preparedStmt;
@@ -501,6 +501,7 @@ public class Hospital {
             List<MedicalRecord> medicalRecords = new ArrayList<>();
 
             while(set.next()){
+                System.out.println("adding a new record");
                 MedicalRecord medicalRecord = new MedicalRecord();
                 medicalRecord.setUsername( set.getString("username") );
                 medicalRecord.setPatientID( set.getString("patient_ID") );
@@ -520,7 +521,7 @@ public class Hospital {
 
     public List<Prescription> getPrescriptionsOfPatient(String patientId) {
         String sql = "SELECT patient_ID, prescription_ID, drug_name, dosage, duration "
-                + "FROM medical_record "
+                + "FROM prescription "
                 + "WHERE patient_ID = '" + patientId + "'";
         try {
             Statement st = conn.createStatement();
@@ -556,7 +557,7 @@ public class Hospital {
     	boolean committed = false;
     	String sql = 
     			   "UPDATE patient " + 
-    			   "  SET (first_name = ?, middle_initial = ?,last_name = ?, email = ?, address = ?, sex = ?, insurance_id = ?, phone = ?, doctor = ?)" +
+    			   "  SET first_name = ?, middle_initial = ?,last_name = ?, email = ?, address = ?, sex = ?, insurance_id = ?, phone = ?, doctor = ?" +
     			   "WHERE patient_ID = ?";
     			PreparedStatement pstmt;
 				try {
@@ -595,7 +596,7 @@ public class Hospital {
     	boolean committed = false;
     	String sql = 
     			   "UPDATE employee " + 
-    			   "  SET (first_name = ?, middle_initial = ?, last_name = ?, phone = ?, sex = ?, ssn = ?, email = ?, address = ?, type = ?)" +
+    			   "  SET first_name = ?, middle_initial = ?, last_name = ?, phone = ?, sex = ?, ssn = ?, email = ?, address = ?, type = ?" +
     			   "WHERE username = ?";
     			PreparedStatement pstmt;
 				try {
@@ -634,7 +635,7 @@ public class Hospital {
     	boolean committed = false;
     	String sql = 
     			   "UPDATE appointment " + 
-    			   "  SET (date = ?, reason_for_visit = ?)" +
+    			   "  SET date = ?, reason_for_visit = ?" +
     			   "WHERE username = ?, patient_ID = ?, date = ?";
     			PreparedStatement pstmt;
 				try {
@@ -668,7 +669,7 @@ public class Hospital {
     	boolean committed = false;
     	String sql = 
     			   "UPDATE prescripton " + 
-    			   "  SET (prescription_id = ?, drug_name = ?, dosage = ?, duration = ?)" +
+    			   "  SET prescription_id = ?, drug_name = ?, dosage = ?, duration = ?" +
     			   "WHERE patient_ID = ?";
     			PreparedStatement pstmt;
 				try {
@@ -702,7 +703,7 @@ public class Hospital {
     	boolean committed = false;
     	String sql = 
     			   "UPDATE medical_history " + 
-    			   "  SET (blood_type = ?, family_history = ?, past_conditions = ?, allergies = ?, medications = ?)" +
+    			   "  SET blood_type = ?, family_history = ?, past_conditions = ?, allergies = ?, medications = ?" +
     			   "WHERE patient_ID = ?";
     			PreparedStatement pstmt;
 				try {
@@ -712,7 +713,7 @@ public class Hospital {
 					pstmt.setString(3, mh.getPastConditions());
 					pstmt.setString(4, mh.getAllergies());
 					pstmt.setString(5, mh.getMedications());
-					pstmt.setString(5, mh.getPatientID());
+					pstmt.setString(6, mh.getPatientID());
 	    			pstmt.executeUpdate();
 	    			committed = true;	
 				}

@@ -79,11 +79,18 @@ public class MedicalHistory {
     // endregion
 
     public String toString(){
-        String view = "Blood Type: " + bloodType
-                + "\nAllergies: " + allergies
-                + "\nMedications: " + medications
-                + "\nPast Conditions: " + pastConditions
-                + "\nFamily History: " + familyHistory;
-        return view;
+        return "Blood Type: " + bloodType
+                + "\n-----------------------"
+                + "\nAllergies: "
+                + allergies
+                + "\n-----------------------"
+                + "\nMedications: "
+                + medications
+                + "\n-----------------------"
+                + "\nPast Conditions: "
+                + pastConditions
+                + "\n-----------------------"
+                + "\nFamily History: "
+                + familyHistory;
     }
 }

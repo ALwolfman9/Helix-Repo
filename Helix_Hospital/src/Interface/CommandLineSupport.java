@@ -17,10 +17,10 @@ public class CommandLineSupport extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=================================");
-        System.out.println(String.format("Welcome %s %s!", user.getFirstName(), user.getLastName()));
-
         while(true) {
+
+            System.out.println("\n=================================");
+            System.out.println(String.format("Welcome %s %s!", user.getFirstName(), user.getLastName()));
             printHelp();
             String cmd = in.next();
 
@@ -81,11 +81,11 @@ public class CommandLineSupport extends CommandLineUser {
     void viewPatient(Patient patient) {
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=================================");
-        System.out.println(String.format("Profile of %s %s (Patient ID: %s)",
-                patient.getFirstName(), patient.getLastName(), patient.getPatientID()));
-
         while(true) {
+
+            System.out.println("\n=================================");
+            System.out.println(String.format("Profile of %s %s (Patient ID: %s)",
+                    patient.getFirstName(), patient.getLastName(), patient.getPatientID()));
             printPatientViewHelp(patient);
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
@@ -110,12 +110,101 @@ public class CommandLineSupport extends CommandLineUser {
         }
     }
 
+    @Override
+    void viewPatientInfo(Patient patient){
+        Scanner in = new Scanner(System.in);
+        while(true) {
+
+            //TODO make this display all the patient's info
+            System.out.println("\n=================================");
+            System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
+            System.out.println(patient.toString());
+            printPatientInfoHelp();
+            String cmd = in.nextLine();
+            String[] cmdArgs = cmd.split("\\s+");
+            switch(cmdArgs[0]){
+                case "e":
+                case "E":
+                case "edit":
+                    editPatientInfo(patient);
+                    break;
+                case "q":
+                case "Q":
+                case "quit":
+                    return;
+                default:
+                    System.out.println("That command/ID was not recognized");
+            }
+        }
+    }
+
+    private void editPatientInfo(Patient patient){
+        Scanner in = new Scanner(System.in);
+
+        System.out.println();
+        System.out.println("Edit a Patient");
+
+        System.out.println("Current first name is " + patient.getFirstName());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setFirstName(firstNameValidation(in));
+
+        System.out.println("Current middle intial is " + patient.getMiddleInit());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setMiddleInit(middleInitialValidation(in));
+
+        System.out.println("Current last name is " + patient.getLastName());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setLastName(lastNameValidation(in));
+
+        System.out.println("Current Insurance ID is " + patient.getInsuranceID());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setInsuranceID(insuranceValidation(in));
+
+        System.out.println("Current phone number is " + patient.getPhoneNumber());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setPhoneNumber(phoneValidation(in));
+
+        System.out.println("Current gender is " + patient.getGender());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setGender(genderValidation(in));
+
+        System.out.println("Current email is " + patient.getEmail());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setEmail(emailValidation(in));
+
+        System.out.println("Current address is " + patient.getAddress());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setAddress(addressValidation(in));
+
+        System.out.println("Current doctor is " + patient.getDoctor());
+        System.out.println("Do you want to change this? (y/n)");
+        if(in.nextLine().equals("y"))
+            patient.setDoctor(doctorValidation(in));
+
+        hospital.updatePatient(patient);
+    }
+
+    private void printPatientInfoHelp(){
+        System.out.println();
+        System.out.println("Usage: e/E/edit | quit/q/Q");
+        System.out.println("Usage: edit/e/E\t\t\tEdit the patient info");
+        System.out.println("quit/q/Q\t\t\tGo back to patient selection");
+    }
+
     void printPatientViewHelp(Patient p){
         String name = p.getFirstName();
         System.out.println();
         System.out.println("Usage: info/i/I | appointments/a/A | quit/q/Q");
         System.out.println(String.format("info/i/I\t\t\tView, %s's Patient Info", name));
-        System.out.println(String.format("appointments/a/A\t\t\tView, edit, and add to %s's Appointments", name));
+        System.out.println(String.format("appointments/a/A\tView, edit, and add to %s's Appointments", name));
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 
@@ -134,7 +223,7 @@ public class CommandLineSupport extends CommandLineUser {
 
     private String doctorValidation(Scanner in){
         while(true) {
-            System.out.println("*Enter the patient's doctor's username: ");
+            System.out.println("*Enter the username of the patient's doctor: ");
             System.out.println("(Enter $list to list each doctor and their usernames)");
             String doctor = in.nextLine();
             if(doctor.equals("$list")) {

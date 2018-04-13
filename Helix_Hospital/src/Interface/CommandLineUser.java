@@ -34,11 +34,12 @@ public abstract class CommandLineUser extends CommandLine{
         List<Patient> patients = hospital.getAllPatients();
         if(patients.size() < 1) System.out.println("There are no patients.");
         else {
-            System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
-            for (Patient p : patients) {
-                System.out.println(p.toString());
-            }
             while (true) {
+                System.out.println("\n=================================");
+                System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
+                for (Patient p : patients) {
+                    System.out.println(p.toString());
+                }
                 System.out.println("Enter a patient ID to view their profile, or enter 'q' to go back to home");
                 Scanner in = new Scanner(System.in);
                 String cmd = in.nextLine();
@@ -72,9 +73,13 @@ public abstract class CommandLineUser extends CommandLine{
     void viewPatientInfo(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=================================");
-        System.out.println(patient.toString());
         while(true) {
+
+            //TODO make this print out all the patient's info
+
+            System.out.println("\n=================================");
+            System.out.println(String.format("%4s%30s%15s%15s", "ID", "Name", "InsuranceID", "Doctor"));
+            System.out.println(patient.toString());
             printPatientInfoHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
@@ -87,30 +92,29 @@ public abstract class CommandLineUser extends CommandLine{
                     System.out.println("That command/ID was not recognized");
             }
         }
+
     }
 
     private void printPatientInfoHelp(){
         System.out.println();
-        System.out.println("Usage: e/E/edit | quit/q/Q");
-        System.out.println("Usage: edit/e/E\t\t\tEdit the patient info");
+        System.out.println("Usage: quit/q/Q");
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 
     void viewPatientHistory(Patient patient){
         Scanner in = new Scanner(System.in);
-
         MedicalHistory medicalHistory = hospital.getMedicalHistory(patient);
         if(medicalHistory == null) {
-            System.out.println(patient.getFirstName() + " has no Medical History yet. Do you want to add one? (y/n)");
-            String question = in.next();
+            System.out.println("\n" + patient.getFirstName() + " has no Medical History yet. Do you want to add one? (y/n)");
+            String question = in.nextLine();
             if(question.equals("y")) addMedicalHistory(patient);
             else return;
         }
-        else System.out.println(medicalHistory.toString());
+        medicalHistory = hospital.getMedicalHistory(patient);
 
-        System.out.println("\n=================================");
-        System.out.println();
         while(true) {
+            System.out.println("\n=================================");
+            System.out.println(medicalHistory.toString());
             printPatientHistoryHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
@@ -141,16 +145,16 @@ public abstract class CommandLineUser extends CommandLine{
         bloodType = in.nextLine();
 
         System.out.println("Enter family history: ");
-        familyHistory = in.nextLine();
+        familyHistory = "\n" + in.nextLine();
 
         System.out.println("Enter past conditions and injuries: ");
-        existingConditions = in.nextLine();
+        existingConditions = "\n" + in.nextLine();
 
         System.out.println("Enter allergies: ");
-        allergies = in.nextLine();
+        allergies = "\n" + in.nextLine();
 
         System.out.println("Enter medications: ");
-        medications = in.nextLine();
+        medications = "\n" + in.nextLine();
 
         hospital.addMedicalHistory(patient.getPatientID(), bloodType, allergies,
                 medications, existingConditions, familyHistory);
@@ -163,36 +167,45 @@ public abstract class CommandLineUser extends CommandLine{
         System.out.println();
         System.out.println("Edit Medical History");
 
-        System.out.println("Current family history: " + medicalHistory.getFamilyHistory());
-        System.out.println("Add to family history: (If no changes, hit enter)");
+        System.out.println("Current family history: "
+                + "\n-----------------------"
+                + medicalHistory.getFamilyHistory());
+
+        System.out.println("\nAdd to family history: (If no changes, hit enter)");
         familyHistory = in.nextLine();
         if(!familyHistory.equals(""))
             medicalHistory.setFamilyHistory(medicalHistory.getFamilyHistory() + "\n" +  familyHistory);
 
-        System.out.println("Past conditions and injuries: " + medicalHistory.getPastConditions());
-        System.out.println("Add to past conditions and injuries: (If no changes, hit enter)");
+        System.out.println("\nPast conditions and injuries: "
+                + "\n-----------------------"
+                + medicalHistory.getPastConditions());
+
+        System.out.println("\nAdd to past conditions and injuries: (If no changes, hit enter)");
         existingConditions = in.nextLine();
         if(!existingConditions.equals(""))
             medicalHistory.setPastConditions(medicalHistory.getPastConditions() + "\n" + existingConditions);
 
-        System.out.println("Current allergies: " + medicalHistory.getAllergies());
+        System.out.println("\nCurrent allergies: \n"
+                + "\n-----------------------"
+                + medicalHistory.getAllergies());
         loop:
         while(true) {
-            System.out.println("To add to this list, enter 'a'.\n" +
-                    "To delete and replace the list, enter 'r'.\n" +
-                    "If there are no changes, hit enter.");
+            System.out.println("\n\tTo add to this list, enter 'a'.\n" +
+                    "\tTo delete and replace the list, enter 'r'.\n" +
+                    "\tIf there are no changes, hit enter.");
             allergies = in.nextLine();
 
             switch (allergies) {
                 case "a":
                     System.out.println("Enter the allergies to add to the list: ");
-                    allergies = in.next();
+                    allergies = in.nextLine();
                     medicalHistory.setAllergies(medicalHistory.getAllergies() + "\n" + allergies);
-                    break;
+                    break loop;
                 case "r":
                     System.out.println("The current allergies list will be deleted. Enter the allergies to replace it: ");
-                    allergies = in.next();
+                    allergies = in.nextLine();
                     medicalHistory.setAllergies(allergies);
+                    break loop;
                 case "":
                     break loop;
                 default:
@@ -201,25 +214,28 @@ public abstract class CommandLineUser extends CommandLine{
             }
         }
 
-        System.out.println("Current medications: " + medicalHistory.getMedications());
+        System.out.println("\nCurrent medications: "
+                + "\n-----------------------"
+                + medicalHistory.getMedications());
         loop:
         while(true) {
-            System.out.println("To add to this list, enter 'a'.\n" +
-                    "To delete and replace the list, enter 'r'.\n" +
-                    "If there are no changes, hit enter.");
+            System.out.println("\n\tTo add to this list, enter 'a'.\n" +
+                    "\tTo delete and replace the list, enter 'r'.\n" +
+                    "\tIf there are no changes, hit enter.");
             medications = in.nextLine();
 
             switch (medications) {
                 case "a":
                     System.out.println("Enter the medications to add to the list: ");
-                    medications = in.next();
-                    medicalHistory.setAllergies(medicalHistory.getAllergies() + "\n" + medications);
-                    break;
+                    medications = in.nextLine();
+                    medicalHistory.setMedications(medicalHistory.getAllergies() + "\n" + medications);
+                    break loop;
                 case "r":
                     System.out.println("The current medications list will be deleted. " +
                             "Enter the medication(s) to replace it: ");
-                    medications = in.next();
-                    medicalHistory.setAllergies(medications);
+                    medications = in.nextLine();
+                    medicalHistory.setMedications(medications);
+                    break loop;
                 case "":
                     break loop;
                 default:
@@ -228,36 +244,37 @@ public abstract class CommandLineUser extends CommandLine{
             }
         }
 
-        //hospital.updateMedicalHistory(patient);
+        hospital.updateMedicalHistory(medicalHistory);
     }
 
     private void printPatientHistoryHelp(){
         System.out.println();
-        System.out.println("Usage: a/A/add | quit/q/Q");
-        System.out.println("add/a/A\t\t\tAdd a new Medical History");
+        System.out.println("Usage: e/E/edit | quit/q/Q");
+        System.out.println("edit/e/E\t\t\tEdit the patient's medical history");
         System.out.println("quit/q/Q\t\t\tGo back to patient selection");
     }
 
     void viewPatientAppointments(Patient patient){
         Scanner in = new Scanner(System.in);
-
-        List<Appointment> appointments = hospital.getAppointmentsOfPatient(patient.getPatientID());
-
-        if(appointments == null) System.out.println("There are no appointments.");
-        else {
-            System.out.println("Viewing appointments for: " + patient.getFirstName() + " " + patient.getLastName());
-            System.out.println("\n=================================");
-            for(Appointment appointment : appointments){
-                System.out.println(appointment.patientView(false));
-            }
-        }
-
-        System.out.println("\n=================================");
-        System.out.println(String.format(""));
         while(true) {
+
+            List<Appointment> appointments = hospital.getAppointmentsOfPatient(patient.getPatientID());
+
+            if(appointments == null) System.out.println("There are no appointments.");
+            else {
+                System.out.println("\n=================================");
+                System.out.println("Viewing appointments for: " + patient.getFirstName() + " " + patient.getLastName());
+                System.out.println("=================================");
+                for(Appointment appointment : appointments){
+                    System.out.println(appointment.patientView(false));
+                }
+            }
+
+            System.out.println("=================================");
             printPatientAppointmentsHelp();
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
+
             switch(cmdArgs[0]){
                 case "a":
                 case "A":
@@ -277,8 +294,8 @@ public abstract class CommandLineUser extends CommandLine{
     private void printPatientAppointmentsHelp(){
         System.out.println();
         System.out.println("Usage: add/a/A | quit/q/Q");
-        System.out.println("add/a/A\t\t\tAdd a new appointment");
-        System.out.println("quit/q/Q\t\t\tGo back to patient selection");
+        System.out.println("add/a/A\t\tAdd a new appointment");
+        System.out.println("quit/q/Q\tGo back to patient selection");
     }
 
     private void addAppointment(Patient patient){
@@ -322,16 +339,17 @@ public abstract class CommandLineUser extends CommandLine{
         }
         System.out.println("Enter the reason for the appointment:");
         reasonForVisit = in.nextLine();
-        // TODO add dateTime
-        LocalDateTime dateTime = getDateTime(in);
+
+        LocalDateTime dateTime = getDateTime(in, true);
         hospital.addAppointment(doctor, patientId, dateTime, reasonForVisit);
     }
 
-    private LocalDateTime getDateTime(Scanner in){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm a");
+    LocalDateTime getDateTime(Scanner in, boolean appointment){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
         LocalDateTime dateTime;
 
-        System.out.println("Enter the date and time of the appointment in the format \"yyyy-mm-dd hh:mm AM/PM");
+        System.out.println(String.format("Enter the date and time %s in the format \"yyyy-mm-dd hh:mm AM/PM",
+                appointment ? "of the appointment" : "for the record"));
         while(true) {
             String date = in.nextLine();
 

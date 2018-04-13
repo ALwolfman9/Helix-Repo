@@ -17,10 +17,10 @@ public class CommandLineNurse extends CommandLineUser {
 
         Scanner in = new Scanner(System.in);
 
-        System.out.println("\n=================================");
-        System.out.println(String.format("Welcome Nurse %s %s!", user.getFirstName(), user.getLastName()));
-
         while(true) {
+
+            System.out.println("\n=================================");
+            System.out.println(String.format("Welcome Nurse %s %s!", user.getFirstName(), user.getLastName()));
             printHelp();
             String cmd = in.next();
 
@@ -50,13 +50,13 @@ public class CommandLineNurse extends CommandLineUser {
 
     void viewPatient(Patient patient) {
         Scanner in = new Scanner(System.in);
-
-        System.out.println("\n=================================");
-        System.out.println(String.format("Profile of %s %s (Patient ID: %s)",
-                patient.getFirstName(), patient.getLastName(), patient.getPatientID()));
         // support can do 'a' and 'i'
         // nurses can do 'a', 'h', and 'i'
         while(true) {
+
+            System.out.println("\n=================================");
+            System.out.println(String.format("Profile of %s %s (Patient ID: %s)",
+                    patient.getFirstName(), patient.getLastName(), patient.getPatientID()));
             printPatientViewHelp(patient);
             String cmd = in.nextLine();
             String[] cmdArgs = cmd.split("\\s+");
