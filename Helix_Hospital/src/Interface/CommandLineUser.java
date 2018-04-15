@@ -366,12 +366,23 @@ public abstract class CommandLineUser extends CommandLine{
 
             try {
                 dateTime = LocalDateTime.parse(date, formatter);
+                dateValidation(dateTime);
                 break;
             } catch (DateTimeParseException e) {
                 System.out.println("The date was not entered in the correct format. Try again:");
+            }
+            catch(IllegalArgumentException e){
+                System.out.println("The date entered is invalid. Try again:");
             }
         }
         return dateTime;
     }
 
+    private void dateValidation(LocalDateTime dateTime) throws IllegalArgumentException{
+        LocalDateTime dateNow = LocalDateTime.now();
+        //if the time given is before or equal to the current time, invalid
+        if(dateNow.compareTo(dateTime) > 0){
+            throw new IllegalArgumentException("Invalid date. Appointments need to be in the future.");
+        }
+    }
 }
