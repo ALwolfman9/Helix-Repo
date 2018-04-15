@@ -29,16 +29,16 @@ public class Employee extends Person{
     }
 
     Employee(){
-        this.username = null;
-        this.type = null;
-        this.firstName = null;
-        this.middleInit = null;
-        this.lastName = null;
-        this.email = null;
-        this.address = null;
-        this.gender = null;
-        this.ssn = null;
-        this.type = null;
+        this.username = "";
+        this.type = Type.ERROR;
+        this.firstName = "";
+        this.middleInit = "";
+        this.lastName = "";
+        this.phoneNumber = "";
+        this.email = "";
+        this.address = "";
+        this.gender = Gender.O;
+        this.ssn = "";
     }
     //endregion
 
