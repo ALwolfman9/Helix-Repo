@@ -351,10 +351,23 @@ public abstract class CommandLineUser extends CommandLine{
         System.out.println("Enter the reason for the appointment:");
         reasonForVisit = in.nextLine();
 
-        LocalDateTime dateTime = getDateTime(in, true);
-        hospital.addAppointment(doctor, patientId, dateTime, reasonForVisit);
+        boolean validTime = false;
+        LocalDateTime dateTime;
+        
+        do {
+        	dateTime = getDateTime(in, true);
+        
+        	if(hospital.verifyTimeSlot(doctor, patientId, dateTime)) {
+        		validTime = true;
+        	}
+        } while (!validTime);
+        
+        
+        if(hospital.addAppointment(doctor, patientId, dateTime, reasonForVisit)) {
+        	System.out.println("Appointment Created...");
+        }
     }
-
+    
     LocalDateTime getDateTime(Scanner in, boolean appointment){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
         LocalDateTime dateTime;
@@ -366,12 +379,23 @@ public abstract class CommandLineUser extends CommandLine{
 
             try {
                 dateTime = LocalDateTime.parse(date, formatter);
+                dateValidation(dateTime);
                 break;
             } catch (DateTimeParseException e) {
                 System.out.println("The date was not entered in the correct format. Try again:");
+            }
+            catch(IllegalArgumentException e){
+                System.out.println("The date entered is invalid. Try again:");
             }
         }
         return dateTime;
     }
 
+    private void dateValidation(LocalDateTime dateTime) throws IllegalArgumentException{
+        LocalDateTime dateNow = LocalDateTime.now();
+        //if the time given is before or equal to the current time, invalid
+        if(dateNow.compareTo(dateTime) > 0){
+            throw new IllegalArgumentException("Invalid date. Appointments need to be in the future.");
+        }
+    }
 }

@@ -514,7 +514,7 @@ public class Hospital {
     public List<Appointment> getAppointmentsOfEmployee(String username){
         String sql = "SELECT username, patient_ID, date, reason_for_visit "
                 + "FROM appointment "
-                + "WHERE patient_ID = '" + username + "'";
+                + "WHERE username = '" + username + "'";
         try {
             Statement st = conn.createStatement();
             ResultSet set = st.executeQuery(sql);
@@ -783,6 +783,44 @@ public class Hospital {
     	return true;
     }
     
+    
+    //appointments verification
+    public boolean verifyTimeSlot(String username, String patientID, LocalDateTime datetime) {
+    	LocalDateTime hourBefore = datetime.minusMinutes(59);
+    	Timestamp ts1 = Timestamp.valueOf(hourBefore.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    	LocalDateTime hourAfter = datetime.plusMinutes(59);
+    	Timestamp ts2 = Timestamp.valueOf(hourAfter.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    	
+    	String sql = "SELECT username, patient_ID, date, reason_for_visit "
+                + "FROM appointment "
+                + "WHERE username = '" + username + "' AND date BETWEEN '" + ts1 + "' AND '" + ts2 + "'";
+    	String sql2 = "SELECT username, patient_ID, date, reason_for_visit "
+                + "FROM appointment "
+                + "WHERE patient_ID = '" + patientID + "' AND date BETWEEN '" + ts1 + "' AND '" + ts2 + "'";
+        try {
+            Statement st = conn.createStatement();
+            ResultSet set = st.executeQuery(sql);
+            if(set.first()) {
+            	System.out.println("This Doctor already has an appointment scheduled within an hour of this time."
+            			+ "\n" + "Select a different time.");
+            	return false;
+            }
+            st = conn.createStatement();
+            set = st.executeQuery(sql);
+            if(set.first()) {
+            	System.out.println("This Patient already has an appointment scheduled within an hour of this time."
+            			+ "\n" + "Select a different time.");
+            	return false;
+            }
+            
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    	
+    	
+    	return true;
+    }
 
     public static String formatGender(Employee.Gender g){
         if(g == null) return null;

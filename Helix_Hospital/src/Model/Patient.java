@@ -34,16 +34,16 @@ public class Patient extends Person{
     }
 
     Patient(){
-        this.patientID = null;
-        this.insuranceID = null;
-        this.firstName = null;
-        this.middleInit = null;
-        this.lastName = null;
-        this.phoneNumber = null;
-        this.email = null;
-        this.address = null;
-        this.gender = null;
-        this.doctor = null;
+        this.patientID = "";
+        this.insuranceID = "";
+        this.firstName = "";
+        this.middleInit = "";
+        this.lastName = "";
+        this.phoneNumber = "";
+        this.email = "";
+        this.address = "";
+        this.gender = Gender.O;
+        this.doctor = "";
     }
     //endregion
 

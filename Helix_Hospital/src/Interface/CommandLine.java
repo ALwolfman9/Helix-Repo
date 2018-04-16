@@ -33,7 +33,7 @@ public abstract class CommandLine {
             System.out.println("Enter middle initial: ");
             String middleInitial = in.nextLine();
             if (middleInitial.length() == 0) {
-                return null;
+                return "";
             }
             else if (middleInitial.length() == 1) {
                 return middleInitial;
@@ -62,7 +62,7 @@ public abstract class CommandLine {
             System.out.println("Enter the phone number (no dashes): ");
             String phone = in.nextLine();
             if (phone.length() == 0) {
-                return null;
+                return "";
             }
             else if (phone.length() == 10 && phone.matches("[0-9]+")) {
                 return phone;
@@ -97,7 +97,7 @@ public abstract class CommandLine {
             System.out.println("Enter the email: ");
             String email = in.nextLine();
             if (email.length() == 0) {
-                return null;
+                return "";
             }
             else if (email.length() <= 50 && pattern.matcher(email).matches()) {
                 return email;
@@ -113,7 +113,7 @@ public abstract class CommandLine {
             System.out.println("Enter the address: ");
             String address = in.nextLine();
             if (address.length() == 0) {
-                return null;
+                return "";
             }
             else if (address.length() <= 255) {
                 return address;
