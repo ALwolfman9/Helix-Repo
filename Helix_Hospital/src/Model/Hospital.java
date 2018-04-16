@@ -806,7 +806,7 @@ public class Hospital {
             	return false;
             }
             st = conn.createStatement();
-            set = st.executeQuery(sql);
+            set = st.executeQuery(sql2);
             if(set.first()) {
             	System.out.println("This Patient already has an appointment scheduled within an hour of this time."
             			+ "\n" + "Select a different time.");
