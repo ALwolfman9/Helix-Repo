@@ -312,8 +312,6 @@ public abstract class CommandLineUser extends CommandLine{
     void addAppointment(Patient patient){
         Scanner in = new Scanner(System.in);
 
-        //TODO check that there are patients and doctors
-
         String doctor, patientId = patient.getPatientID(), reasonForVisit;
 
         System.out.println();

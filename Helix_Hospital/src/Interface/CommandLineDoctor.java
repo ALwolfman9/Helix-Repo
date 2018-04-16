@@ -261,18 +261,25 @@ public class CommandLineDoctor extends CommandLineUser {
         String drug, dosage, duration, id;
 
         System.out.println();
+
         System.out.println("Add Prescription");
 
-        System.out.println("Enter the name of the drug:");
-        drug = in.nextLine();
+        drug = notNull("name of the drug", in);
+        dosage = notNull("dosage", in);
+        duration = notNull("duration", in);
 
-        System.out.println("Enter the dosage:");
-        dosage = in.nextLine();
-
-        System.out.println("Enter the duration:");
-        duration = in.nextLine();
         hospital.addPrescription(patient.getPatientID(), drug, dosage, duration);
 
+    }
+
+    private String notNull(String what, Scanner in){
+        String result;
+        while(true){
+            System.out.println("Enter the " + what + ":");
+            result = in.nextLine();
+            if(!result.equals("")) return result;
+            System.out.println("You must enter a " + what + ".");
+        }
     }
 
     @Override

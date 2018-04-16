@@ -17,9 +17,9 @@ public class DBController {
 					"username varchar(30) not null primary key, " +			
 					"first_name varchar(20) not null, " +
 					"middle_initial varchar(1), " +
-					"last_name varchar(30), " +
+					"last_name varchar(30) not null, " +
 					"phone char(10), " +
-					"sex enum('M', 'F', 'O'), " +
+					"sex enum('M', 'F', 'O') not null, " +
 					"ssn char(10) not null unique, " +
 					"email varchar(50), " +
 					"address varchar(255), " +
@@ -41,10 +41,10 @@ public class DBController {
 					+ "last_name VARCHAR(30) NOT NULL,"
 					+ "email VARCHAR(50),"
 					+ "address varchar(255), "
-					+ "sex ENUM('M', 'F', 'O'),"
-					+ "insurance_ID CHAR(15),"
+					+ "sex ENUM('M', 'F', 'O') NOT NULL,"
+					+ "insurance_ID CHAR(15) NOT NULL,"
 					+ "phone CHAR(10),"
-					+ "doctor VARCHAR(30), "
+					+ "doctor VARCHAR(30) NOT NULL, "
 					+ "FOREIGN KEY (doctor) REFERENCES DOCTOR(username)"
 					+ ");";
 			st.execute(createString);
