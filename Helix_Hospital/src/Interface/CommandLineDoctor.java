@@ -271,11 +271,46 @@ public class CommandLineDoctor extends CommandLineUser {
 
         System.out.println("Enter the duration:");
         duration = in.nextLine();
-
-        //TODO Is prescriptionID auto generated, like patientID?
         hospital.addPrescription(patient.getPatientID(), drug, dosage, duration);
 
     }
 
+    @Override
+    void viewPatientAppointments(Patient patient){
+        Scanner in = new Scanner(System.in);
+        while(true) {
+
+            List<Appointment> appointments = hospital.getAppointmentsOfPatient(patient.getPatientID());
+
+            if(appointments == null) System.out.println("There are no appointments.");
+            else {
+                System.out.println("\n=================================");
+                System.out.println("Viewing appointments for: " + patient.getFirstName() + " " + patient.getLastName());
+                System.out.println("=================================");
+                for(Appointment appointment : appointments){
+                    System.out.println(appointment.patientView(true));
+                }
+            }
+
+            System.out.println("=================================");
+            printPatientAppointmentsHelp();
+            String cmd = in.nextLine();
+            String[] cmdArgs = cmd.split("\\s+");
+
+            switch(cmdArgs[0]){
+                case "a":
+                case "A":
+                case "add":
+                    addAppointment(patient);
+                    break;
+                case "q":
+                case "Q":
+                case "quit":
+                    return;
+                default:
+                    System.out.println("That command/ID was not recognized");
+            }
+        }
+    }
 
 }

@@ -302,14 +302,14 @@ public abstract class CommandLineUser extends CommandLine{
         }
     }
 
-    private void printPatientAppointmentsHelp(){
+    void printPatientAppointmentsHelp(){
         System.out.println();
         System.out.println("Usage: add/a/A | quit/q/Q");
         System.out.println("add/a/A\t\tAdd a new appointment");
         System.out.println("quit/q/Q\tGo back to patient selection");
     }
 
-    private void addAppointment(Patient patient){
+    void addAppointment(Patient patient){
         Scanner in = new Scanner(System.in);
 
         //TODO check that there are patients and doctors
