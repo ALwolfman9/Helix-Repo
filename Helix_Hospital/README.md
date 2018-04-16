@@ -13,15 +13,18 @@ and run "java -jar Helix_Hospital.jar"
 
 To create new employees, go to login and enter 'admin' into the prompt. you will be able to create new employees there.
 
+There are three employee types to create, doctors, nurses, and support staff.
+
 There is an option to refresh your database on start up.
 
 You will need to create the database on the first start up.
 
+Admin is the only way to create new employees.
 
-##Known Bugs in the app
+To create patients, log in as a support worker and choose the new patients option.
 
-When viewing a list of doctors when creating a patient, use '$l' and not '$1' to avoid an error.
+## Basic Operations
 
-Currently the only features available are adding employees and patients to the Hospital and viewing patients
-and employees in the system.
+This applcation is used for running the basic operations of a hospital. Doctors and nurses can view patients and update 
+their information, while support staff can add new patients. All employees can schedule appointments.
 
